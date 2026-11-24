@@ -1,0 +1,3112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#070812">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Neon Dash - Torneo Oficial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070812;
+      --surface: #111428;
+      --surface-2: #191e3a;
+      --line: rgba(255, 255, 255, 0.14);
+      --accent: #00f0ff;
+      --secondary: #ff2ea6;
+      --gold: #ffe14d;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.68);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden !important;
+      background: #03040a;
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    *::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+      height: 100dvh;
+      max-height: 100dvh;
+      background: var(--bg);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden !important;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      transition: background 0.35s ease, border-color 0.35s ease;
+    }
+
+    .font-display {
+      font-family: 'Orbitron', system-ui, sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .app-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+    }
+
+    .app-main {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-main.game-mode {
+      overflow: hidden;
+      padding: 8px 12px 12px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: transform 0.1s ease, opacity 0.15s ease, background 0.2s ease;
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #070c14;
+      background: var(--accent);
+      box-shadow: 0 8px 22px rgba(0, 240, 255, 0.22);
+    }
+
+    .btn-outline {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--line);
+    }
+
+    .canvas-wrap {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #050614;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas#gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    .overlay-layer {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 6, 18, 0.84);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px;
+      z-index: 25;
+      overflow-y: auto;
+    }
+
+    .modal-global {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 5, 14, 0.85);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .toast-banner {
+      position: absolute;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 390px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(17, 20, 40, 0.96);
+      border: 1px solid var(--accent);
+      color: #ffffff;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+      z-index: 60;
+      pointer-events: none;
+      animation: fadeSlide 0.2s ease;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translate(-50%, -8px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .anim-floaty {
+      animation: floaty 2.8s ease-in-out infinite;
+    }
+
+    .tab-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.32);
+      border: 1px solid var(--line);
+    }
+
+    .tab-btn {
+      padding: 9px 10px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #070c14;
+    }
+
+    .switch-btn {
+      width: 50px;
+      height: 28px;
+      border-radius: 999px;
+      padding: 3px;
+      background: rgba(255, 255, 255, 0.16);
+      display: flex;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+
+    .switch-btn.on {
+      background: var(--accent);
+    }
+
+    .switch-knob {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      transition: transform 0.2s ease;
+    }
+
+    .switch-btn.on .switch-knob {
+      transform: translateX(22px);
+      background: #070c14;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.42);
+      color: #ffffff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="app-shell"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // =========================================================================
+      // 1. CONSTANTES, CATÁLOGOS DE SKINS DISTINTAS Y TEMAS MEJORADOS
+      // =========================================================================
+      const STORE_KEY = "neonDashOfflineDB_v4_pro";
+      const CYAN = "#00f0ff";
+      const PINK = "#ff2ea6";
+      const GOLD = "#ffe14d";
+
+      // 8 Skins con GEOMETRÍA Y SILUETAS DISTINTAS
+      const NEON_SKINS = [
+        {
+          id: "default",
+          name: "Clásico Cian",
+          subtitle: "Caza Interceptor · Cian + Rosa",
+          shape: "interceptor",
+          price: 0,
+          body: "#00f0ff",
+          trim: "#ffffff",
+          cockpit: "#07101d",
+          visor: "#ffffff",
+          thruster: "#ff2ea6",
+          glow: "rgba(0, 240, 255, 0.35)"
+        },
+        {
+          id: "neon_electric",
+          name: "Neón Eléctrico",
+          subtitle: "Ala Doble Split · Azul + Oro",
+          shape: "twin_wing",
+          price: 10,
+          body: "#38bdf8",
+          trim: "#fef08a",
+          cockpit: "#091526",
+          visor: "#fef08a",
+          thruster: "#ffe14d",
+          glow: "rgba(56, 189, 248, 0.38)"
+        },
+        {
+          id: "neon_lima_magenta",
+          name: "Neón Lima-Magenta",
+          subtitle: "Lanza Aguja · Lima + Magenta",
+          shape: "needle",
+          price: 25,
+          body: "#a3e635",
+          trim: "#ff2ea6",
+          cockpit: "#121808",
+          visor: "#ffffff",
+          thruster: "#ff2ea6",
+          glow: "rgba(163, 230, 53, 0.38)"
+        },
+        {
+          id: "fantasma_violeta",
+          name: "Fantasma Violeta",
+          subtitle: "Sigilo Stealth · Violeta + Cian",
+          shape: "stealth",
+          price: 35,
+          body: "#a855f7",
+          trim: "#00f0ff",
+          cockpit: "#140924",
+          visor: "#a5f3fc",
+          thruster: "#00f0ff",
+          glow: "rgba(168, 85, 247, 0.40)"
+        },
+        {
+          id: "fuego_solar",
+          name: "Fuego Solar",
+          subtitle: "Fénix Tridente · Naranja + Oro",
+          shape: "phoenix",
+          price: 45,
+          body: "#ff6b1a",
+          trim: "#ffe14d",
+          cockpit: "#1f0c05",
+          visor: "#fff7ed",
+          thruster: "#ffe14d",
+          glow: "rgba(255, 107, 26, 0.40)"
+        },
+        {
+          id: "menta_electrica",
+          name: "Menta Eléctrica",
+          subtitle: "Ala Invertida · Menta + Rosa",
+          shape: "vortex",
+          price: 55,
+          body: "#2dd4bf",
+          trim: "#ff2ea6",
+          cockpit: "#071b19",
+          visor: "#ffffff",
+          thruster: "#ff2ea6",
+          glow: "rgba(45, 212, 191, 0.40)"
+        },
+        {
+          id: "tormenta_azul",
+          name: "Tormenta Azul",
+          subtitle: "Acorazado Pesado · Azul + Blanco",
+          shape: "cruiser",
+          price: 65,
+          body: "#2563eb",
+          trim: "#ffffff",
+          cockpit: "#071126",
+          visor: "#ffffff",
+          thruster: "#e0f2fe",
+          glow: "rgba(37, 99, 235, 0.42)"
+        },
+        {
+          id: "oro_leyenda",
+          name: "Oro Leyenda",
+          subtitle: "Corona Imperial · Oro + Negro",
+          shape: "crown",
+          price: 90,
+          body: "#ffd426",
+          trim: "#111116",
+          cockpit: "#050507",
+          visor: "#fef08a",
+          thruster: "#ff9e00",
+          glow: "rgba(255, 212, 38, 0.45)"
+        },
+        { id: "espectro_cian", name: "Espectro Cian", subtitle: "Caza Interceptor · Cian + Lima", shape: "interceptor", price: 70, body: "#22d3ee", trim: "#a3e635", cockpit: "#04121a", visor: "#ecfeff", thruster: "#a3e635", glow: "rgba(34, 211, 238, 0.40)" },
+        { id: "furia_roja", name: "Furia Roja", subtitle: "Lanza Aguja · Rojo + Oro", shape: "needle", price: 80, body: "#ef4444", trim: "#fbbf24", cockpit: "#1c0808", visor: "#fef3c7", thruster: "#fbbf24", glow: "rgba(239, 68, 68, 0.42)" },
+        { id: "sombra_onyx", name: "Sombra Ónyx", subtitle: "Sigilo Stealth · Negro + Cian", shape: "stealth", price: 100, body: "#1f2937", trim: "#00f0ff", cockpit: "#020617", visor: "#67e8f9", thruster: "#00f0ff", glow: "rgba(0, 240, 255, 0.42)" },
+        { id: "reina_aurora", name: "Reina Aurora", subtitle: "Corona Imperial · Rosa + Menta", shape: "crown", price: 120, body: "#f472b6", trim: "#5eead4", cockpit: "#1a0714", visor: "#fdf2f8", thruster: "#5eead4", glow: "rgba(244, 114, 182, 0.45)" }
+      ];
+
+      // 3 Temas / Apariencias de Interfaz Mejorados (con atmósfera y efectos propios)
+      const INTERFACE_THEMES = [
+        {
+          id: "neon_nocturno",
+          name: "Neón Nocturno",
+          subtitle: "Morado noche synthwave · Luna neón con halo",
+          price: 0,
+          appBg: "#070812",
+          surface: "#111428",
+          surface2: "#191e3a",
+          line: "rgba(255, 255, 255, 0.14)",
+          accent: "#00f0ff",
+          secondary: "#ff2ea6",
+          heroGrad: "linear-gradient(135deg, rgba(0,240,255,0.18), rgba(255,46,166,0.20))",
+          skyTop: "#050614",
+          skyMid: "#0d0b26",
+          skyLow: "#1d1038",
+          skyHorizon: "#2a124a",
+          moonTop: "#ffe14d",
+          moonMid: "#ff5e7e",
+          moonBot: "#ff2ea6",
+          moonGlow: "#ff2ea6",
+          moonCut: "#0e0b27",
+          moonRing: "rgba(0, 240, 255, 0.35)",
+          atmosphere: "synthwave",
+          groundBg: "#090b1a",
+          horizonLine: "#00f0ff",
+          gridH: "rgba(0, 240, 255, 0.22)",
+          gridV: "rgba(255, 46, 166, 0.28)"
+        },
+        {
+          id: "amanecer_solar",
+          name: "Amanecer Solar",
+          subtitle: "Atardecer cálido naranja-oro · Sol dorado con rayos",
+          price: 60,
+          appBg: "#180a07",
+          surface: "#29120d",
+          surface2: "#3b1912",
+          line: "rgba(255, 196, 120, 0.24)",
+          accent: "#ffb703",
+          secondary: "#fb5607",
+          heroGrad: "linear-gradient(135deg, rgba(255,183,3,0.26), rgba(251,86,7,0.24))",
+          skyTop: "#1c0716",
+          skyMid: "#591426",
+          skyLow: "#b8332a",
+          skyHorizon: "#ff8c00",
+          moonTop: "#fff8c9",
+          moonMid: "#ffd166",
+          moonBot: "#f77f00",
+          moonGlow: "#ffb703",
+          moonCut: "#471120",
+          moonRing: "rgba(255, 225, 77, 0.45)",
+          atmosphere: "solar",
+          groundBg: "#160809",
+          horizonLine: "#ffb703",
+          gridH: "rgba(255, 183, 3, 0.26)",
+          gridV: "rgba(251, 86, 7, 0.32)"
+        },
+        {
+          id: "aurora_glacial",
+          name: "Aurora Glacial",
+          subtitle: "Noche ártica fría · Aurora boreal ondulante + luna menta",
+          price: 75,
+          appBg: "#041218",
+          surface: "#0a202b",
+          surface2: "#102f3f",
+          line: "rgba(110, 231, 183, 0.24)",
+          accent: "#34d399",
+          secondary: "#38bdf8",
+          heroGrad: "linear-gradient(135deg, rgba(52,211,153,0.24), rgba(56,189,248,0.24))",
+          skyTop: "#020b14",
+          skyMid: "#062332",
+          skyLow: "#0b4d52",
+          skyHorizon: "#127568",
+          moonTop: "#ecfdf5",
+          moonMid: "#6ee7b7",
+          moonBot: "#14b8a6",
+          moonGlow: "#5eead4",
+          moonCut: "#061f2d",
+          moonRing: "rgba(52, 211, 153, 0.45)",
+          atmosphere: "aurora",
+          groundBg: "#041017",
+          horizonLine: "#5eead4",
+          gridH: "rgba(94, 234, 212, 0.25)",
+          gridV: "rgba(56, 189, 248, 0.30)"
+        },
+        { id: "ciudad_neon", name: "Ciudad Neón", subtitle: "Noche urbana magenta-cian · Synthwave", price: 85, appBg: "#0a0614", surface: "#160b28", surface2: "#22103e", line: "rgba(255, 46, 166, 0.28)", accent: "#ff2ea6", secondary: "#00f0ff", heroGrad: "linear-gradient(135deg, rgba(255,46,166,0.26), rgba(0,240,255,0.22))", skyTop: "#070312", skyMid: "#150833", skyLow: "#2b0f4a", skyHorizon: "#3d1560", moonTop: "#f0abfc", moonMid: "#e879f9", moonBot: "#ff2ea6", moonGlow: "#ff2ea6", moonCut: "#140833", moonRing: "rgba(255,46,166,0.45)", atmosphere: "synthwave", groundBg: "#0a0616", horizonLine: "#ff2ea6", gridH: "rgba(255,46,166,0.28)", gridV: "rgba(0,240,255,0.30)" },
+        { id: "ocaso_carmesí", name: "Ocaso Carmesí", subtitle: "Atardecer rojo intenso · Sol carmesí", price: 95, appBg: "#170505", surface: "#2a0d0d", surface2: "#3d1414", line: "rgba(255, 120, 90, 0.26)", accent: "#fb7185", secondary: "#f59e0b", heroGrad: "linear-gradient(135deg, rgba(251,113,133,0.26), rgba(245,158,11,0.24))", skyTop: "#160404", skyMid: "#4a0f16", skyLow: "#8f1d1d", skyHorizon: "#e04a1a", moonTop: "#ffe4e6", moonMid: "#fda4af", moonBot: "#ef4444", moonGlow: "#fb7185", moonCut: "#3d0f16", moonRing: "rgba(251,113,133,0.45)", atmosphere: "solar", groundBg: "#140606", horizonLine: "#fb7185", gridH: "rgba(251,113,133,0.28)", gridV: "rgba(245,158,11,0.32)" },
+        { id: "bosque_boreal", name: "Bosque Boreal", subtitle: "Aurora verde sobre bosque · Luna esmeralda", price: 110, appBg: "#03130c", surface: "#0a2418", surface2: "#0f3523", line: "rgba(110, 231, 183, 0.26)", accent: "#34d399", secondary: "#a3e635", heroGrad: "linear-gradient(135deg, rgba(52,211,153,0.26), rgba(163,230,53,0.22))", skyTop: "#02100a", skyMid: "#052e1d", skyLow: "#0a5a38", skyHorizon: "#128a4d", moonTop: "#ecfdf5", moonMid: "#86efac", moonBot: "#22c55e", moonGlow: "#34d399", moonCut: "#04281a", moonRing: "rgba(52,211,153,0.45)", atmosphere: "aurora", groundBg: "#03130c", horizonLine: "#34d399", gridH: "rgba(52,211,153,0.26)", gridV: "rgba(163,230,53,0.30)" }
+      ];
+
+      // ---- MÚSICA PROCEDURAL: 1 banco de tonos reutilizado, 6 temas comprados ----
+      // Cada track SOLO cambia: patrón de bajo (índices), patrón de lead, tempo, onda y escala.
+      // Las frecuencias base son las mismas en todos: 0 assets, 0 descargas, 0 memoria extra.
+      const MUSIC_SCALE = [110, 130.81, 146.83, 164.81, 196, 220, 246.94, 261.63, 293.66, 329.63, 392, 440];
+      const MUSIC_TRACKS = [
+        { id: "neon_base", name: "Neón Base", subtitle: "Synthwave clásico · 130 BPM", price: 0, bpm: 130, wave: "sawtooth", bass: [0,0,1,2,0,0,3,2], lead: [7, -1, 9, -1, 10, -1, 9, 7], leadVol: 0.035, hat: true },
+        { id: "turbo_160", name: "Turbo 160", subtitle: "Rápido y agresivo · 160 BPM", price: 30, bpm: 160, wave: "sawtooth", bass: [0,0,2,0,1,2,3,3], lead: [7,9,10,9,11,10,9,7], leadVol: 0.04, hat: true },
+        { id: "chill_90", name: "Chill 90", subtitle: "Relajado · 90 BPM, onda suave", price: 35, bpm: 90, wave: "triangle", bass: [0,-1,1,-1,2,-1,3,-1], lead: [4, -1, 5, -1, 7, -1, 5, 4], leadVol: 0.05, hat: false },
+        { id: "boss_140", name: "Modo Boss", subtitle: "Tenso · 140 BPM, bajo grave", price: 50, bpm: 140, wave: "square", bass: [0,0,0,2,0,0,1,2], lead: [7,7,10,-1,11,-1,10,7], leadVol: 0.028, hat: true },
+        { id: "retro_8bit", name: "Retro 8-Bit", subtitle: "Arcade · 145 BPM, onda cuadrada", price: 55, bpm: 145, wave: "square", bass: [0,2,0,1,0,2,3,2], lead: [7,9,7,10,9,11,10,9], leadVol: 0.032, hat: true },
+        { id: "aurora_100", name: "Aurora 100", subtitle: "Espacial · 100 BPM, eco suave", price: 65, bpm: 100, wave: "sine", bass: [0,-1,2,-1,1,-1,3,-1], lead: [8, -1, 10, -1, 11, -1, 10, 8], leadVol: 0.055, hat: false }
+      ];
+      // ---- ESTELAS: solo color + forma, reutilizan el dibujo del jugador ----
+      const SHIP_TRAILS = [
+        { id: "sin_estela", name: "Sin Estela", subtitle: "Limpio · Sin partículas", price: 0, color: null, shape: "none" },
+        { id: "estela_cian", name: "Estela Cian", subtitle: "Chispas cian", price: 20, color: "#00f0ff", shape: "spark" },
+        { id: "estela_fuego", name: "Estela Fuego", subtitle: "Brasas naranja", price: 30, color: "#ff8c00", shape: "ember" },
+        { id: "estela_arcoiris", name: "Estela Arcoíris", subtitle: "Cambia de color cada segundo", price: 45, color: "#ff2ea6", shape: "rainbow" },
+        { id: "estela_diamante", name: "Estela Diamante", subtitle: "Destellos dorados", price: 60, color: "#ffe14d", shape: "diamond" }
+      ];
+      const RANDOM_PRESETS = { skins: "🎲 Aleatorio: Naves", themes: "🎲 Aleatorio: Temas", music: "🎲 Aleatorio: Música", trails: "🎲 Aleatorio: Estelas" };
+
+      // Biomas dinámicos al cruzar 500m, 1000m, 1500m
+      const BIOME_STAGES = [
+        { minMeters: 0, skyTopShift: null, gridAccent: null },
+        { minMeters: 500, skyTopShift: "#0b0726", gridAccent: "#38bdf8" },
+        { minMeters: 1000, skyTopShift: "#1b0729", gridAccent: "#f472b6" },
+        { minMeters: 1500, skyTopShift: "#061c24", gridAccent: "#34d399" }
+      ];
+
+      const COIN_VARIANTS = [
+        { shape: "circle", fill: "#ffe14d", stroke: "#ff9e00", inner: "#fff6b3", glow: "#ffe14d" },
+        { shape: "hex", fill: "#00f0ff", stroke: "#0088cc", inner: "#b8fbff", glow: "#00f0ff" },
+        { shape: "diamond", fill: "#ff4ecd", stroke: "#b8008a", inner: "#ffc2ef", glow: "#ff4ecd" },
+        { shape: "star", fill: "#7dff6b", stroke: "#18a800", inner: "#d9ffd4", glow: "#7dff6b" },
+        { shape: "ring", fill: "#ff9f1c", stroke: "#d95d00", inner: "#ffe0b2", glow: "#ff9f1c" }
+      ];
+
+      const OBS_PALETTES = [
+        { main: "#ff2ea6", glow: "#ff2ea6", top: "#ff94d2", stripe: "#ffd1ec" },
+        { main: "#ff5500", glow: "#ff7700", top: "#ffbe73", stripe: "#fff0db" },
+        { main: "#a855f7", glow: "#c084fc", top: "#e9d5ff", stripe: "#f5ebff" },
+        { main: "#ff1e56", glow: "#ff4d79", top: "#ff9eb5", stripe: "#ffe0e8" }
+      ];
+
+      // =========================================================================
+      // 2. FUNCIÓN COMPARTIDA DE DIBUJO DE NAVE (CANVAS + PREVIEW DE TIENDA)
+      // =========================================================================
+      function drawShipShape(ctx, skin, flameLen) {
+        const shape = skin.shape || "interceptor";
+
+        // 1. Propulsor trasero según silueta
+        ctx.fillStyle = skin.thruster;
+        if (shape === "twin_wing" || shape === "cruiser") {
+          // Doble propulsor
+          ctx.beginPath();
+          ctx.moveTo(-15, -10);
+          ctx.lineTo(-15 - flameLen * 0.9, -6);
+          ctx.lineTo(-15, -2);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(-15, 2);
+          ctx.lineTo(-15 - flameLen * 0.9, 6);
+          ctx.lineTo(-15, 10);
+          ctx.closePath();
+          ctx.fill();
+        } else if (shape === "phoenix") {
+          // Triple pluma de fuego
+          ctx.beginPath();
+          ctx.moveTo(-15, -8);
+          ctx.lineTo(-16 - flameLen * 1.15, 0);
+          ctx.lineTo(-15, 8);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(-15, -6);
+          ctx.lineTo(-16 - flameLen, 0);
+          ctx.lineTo(-15, 6);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // 2. Fuselaje distintivo por cada una de las 8 skins
+        ctx.fillStyle = skin.body;
+        ctx.beginPath();
+
+        if (shape === "interceptor") {
+          // Clásico Cian: Flecha delta equilibrada
+          ctx.moveTo(-16, -13);
+          ctx.lineTo(18, 0);
+          ctx.lineTo(-16, 13);
+          ctx.lineTo(-10, 0);
+        } else if (shape === "twin_wing") {
+          // Neón Eléctrico: Doble ala partida con puntas afiladas
+          ctx.moveTo(-16, -15);
+          ctx.lineTo(8, -6);
+          ctx.lineTo(19, 0);
+          ctx.lineTo(8, 6);
+          ctx.lineTo(-16, 15);
+          ctx.lineTo(-9, 6);
+          ctx.lineTo(-13, 0);
+          ctx.lineTo(-9, -6);
+        } else if (shape === "needle") {
+          // Neón Lima-Magenta: Lanza supersónica larga y estrecha
+          ctx.moveTo(-18, -9);
+          ctx.lineTo(-4, -6);
+          ctx.lineTo(22, 0);
+          ctx.lineTo(-4, 6);
+          ctx.lineTo(-18, 9);
+          ctx.lineTo(-12, 0);
+        } else if (shape === "stealth") {
+          // Fantasma Violeta: Ala volante tipo bombardero furtivo B-2
+          ctx.moveTo(-12, -16);
+          ctx.lineTo(17, 0);
+          ctx.lineTo(-12, 16);
+          ctx.lineTo(-6, 9);
+          ctx.lineTo(-15, 4);
+          ctx.lineTo(-10, 0);
+          ctx.lineTo(-15, -4);
+          ctx.lineTo(-6, -9);
+        } else if (shape === "phoenix") {
+          // Fuego Solar: Tridente con alas curvas hacia adelante
+          ctx.moveTo(-15, -15);
+          ctx.lineTo(6, -11);
+          ctx.lineTo(0, -5);
+          ctx.lineTo(20, 0);
+          ctx.lineTo(0, 5);
+          ctx.lineTo(6, 11);
+          ctx.lineTo(-15, 15);
+          ctx.lineTo(-9, 0);
+        } else if (shape === "vortex") {
+          // Menta Eléctrica: Alas invertidas hacia adelante (forward-swept)
+          ctx.moveTo(-8, -6);
+          ctx.lineTo(7, -15);
+          ctx.lineTo(2, -4);
+          ctx.lineTo(19, 0);
+          ctx.lineTo(2, 4);
+          ctx.lineTo(7, 15);
+          ctx.lineTo(-8, 6);
+          ctx.lineTo(-16, 10);
+          ctx.lineTo(-13, 0);
+          ctx.lineTo(-16, -10);
+        } else if (shape === "cruiser") {
+          // Tormenta Azul: Acorazado hexagonal blindado
+          ctx.moveTo(-16, -12);
+          ctx.lineTo(4, -12);
+          ctx.lineTo(19, -4);
+          ctx.lineTo(19, 4);
+          ctx.lineTo(4, 12);
+          ctx.lineTo(-16, 12);
+          ctx.lineTo(-12, 0);
+        } else {
+          // Oro Leyenda: Corona Imperial de 3 puntas frontales
+          ctx.moveTo(-16, -14);
+          ctx.lineTo(11, -11);
+          ctx.lineTo(6, -5);
+          ctx.lineTo(21, 0);
+          ctx.lineTo(6, 5);
+          ctx.lineTo(11, 11);
+          ctx.lineTo(-16, 14);
+          ctx.lineTo(-10, 0);
+        }
+
+        ctx.closePath();
+        ctx.fill();
+
+        // 3. Borde de detalle / alerones de contraste
+        ctx.strokeStyle = skin.trim;
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+
+        // 4. Cabina y visor
+        ctx.fillStyle = skin.cockpit;
+        ctx.beginPath();
+        ctx.moveTo(-4, -5.5);
+        ctx.lineTo(10, 0);
+        ctx.lineTo(-4, 5.5);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = skin.visor;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(-1, -2.5);
+        ctx.lineTo(7, 0);
+        ctx.stroke();
+      }
+
+      // =========================================================================
+      // 3. ICONOS SVG INLINE NÍTIDOS
+      // =========================================================================
+      const ICONS = {
+        play: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>',
+        trophy: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
+        shop: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+        settings: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+        user: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+        back: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>',
+        exit: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+        pause: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>',
+        heartFull: '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+        heartEmpty: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+        coin: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#ffe14d" stroke="#b45309" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10" stroke="#92400e" stroke-linecap="round"/></svg>',
+        restart: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>'
+      };
+
+      function getSkinPreviewSvg(skin) {
+        const s = skin.shape || "interceptor";
+        let bodyPts = "10,7 39,18 10,29 15,18";
+        let flameHtml = `<polygon points="4,12 12,18 4,24" fill="${skin.thruster}"/>`;
+
+        if (s === "twin_wing") {
+          bodyPts = "8,5 28,13 40,18 28,23 8,31 15,23 11,18 15,13";
+          flameHtml = `<polygon points="3,8 11,12 3,15" fill="${skin.thruster}"/><polygon points="3,21 11,24 3,28" fill="${skin.thruster}"/>`;
+        } else if (s === "needle") {
+          bodyPts = "6,10 20,13 43,18 20,23 6,26 12,18";
+        } else if (s === "stealth") {
+          bodyPts = "12,4 38,18 12,32 17,25 9,21 14,18 9,15 17,11";
+        } else if (s === "phoenix") {
+          bodyPts = "9,5 27,9 22,14 41,18 22,22 27,27 9,31 15,18";
+          flameHtml = `<polygon points="2,10 13,18 2,26" fill="${skin.thruster}"/>`;
+        } else if (s === "vortex") {
+          bodyPts = "15,13 28,5 24,14 40,18 24,22 28,31 15,23 8,27 11,18 8,9";
+        } else if (s === "cruiser") {
+          bodyPts = "8,8 26,8 40,14 40,22 26,28 8,28 12,18";
+          flameHtml = `<polygon points="3,9 10,13 3,16" fill="${skin.thruster}"/><polygon points="3,20 10,23 3,27" fill="${skin.thruster}"/>`;
+        } else if (s === "crown") {
+          bodyPts = "8,6 32,9 28,14 42,18 28,22 32,27 8,30 14,18";
+        }
+
+        return `
+          <svg width="48" height="36" viewBox="0 0 48 36">
+            ${flameHtml}
+            <polygon points="${bodyPts}" fill="${skin.body}" stroke="${skin.trim}" stroke-width="1.3" stroke-linejoin="round"/>
+            <polygon points="18,13 31,18 18,23" fill="${skin.cockpit}"/>
+            <line x1="21" y1="15.5" x2="29" y2="18" stroke="${skin.visor}" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        `;
+      }
+
+      // =========================================================================
+      // 4. PERSISTENCIA LOCAL OFFLINE (25 MONEDAS INICIALES DE PRUEBA)
+      // =========================================================================
+      function createDefaultMissions() {
+        return [
+          { id: "m_dist", title: "Recorre 180m en sesión", target: 180, current: 0, reward: 8, claimed: false },
+          { id: "m_streak", title: "Racha de 12 esquivas", target: 12, current: 0, reward: 6, claimed: false },
+          { id: "m_coins", title: "Recoge 12 monedas", target: 12, current: 0, reward: 10, claimed: false }
+        ];
+      }
+
+      function loadStateFromStorage() {
+        const fallback = {
+          settings: {
+            music: true,
+            sfx: true,
+            volume: 75,
+            vibration: true,
+            showFps: true,
+            equippedSkin: "default",
+            unlockedSkins: ["default"],
+            equippedTheme: "neon_nocturno",
+            unlockedThemes: ["neon_nocturno"],
+            equippedMusic: "neon_base",
+            unlockedMusic: ["neon_base"],
+            equippedTrail: "sin_estela",
+            unlockedTrails: ["sin_estela"],
+            randomSkin: false, randomTheme: false, randomMusic: false, randomTrail: false,
+            playerName: ""
+          },
+          coinsBalance: 25,
+          stats: {
+            gamesPlayed: 0,
+            totalScore: 0,
+            bestRunDistance: 0,
+            totalCoinsEarned: 25
+          },
+          leaderboard: [
+            { id: "bot_1", name: "Valkiria_99", totalScore: 1840, bestRun: 620, games: 4 },
+            { id: "bot_2", name: "CyberPulse", totalScore: 1290, bestRun: 485, games: 3 },
+            { id: "bot_3", name: "KairoDrift", totalScore: 860, bestRun: 340, games: 3 }
+          ],
+          missions: createDefaultMissions()
+        };
+
+        try {
+          const raw = localStorage.getItem(STORE_KEY);
+          if (!raw) return fallback;
+          const parsed = JSON.parse(raw);
+          const mergedSettings = { ...fallback.settings, ...(parsed.settings || {}) };
+          if (!Array.isArray(mergedSettings.unlockedSkins) || !mergedSettings.unlockedSkins.length) {
+            mergedSettings.unlockedSkins = ["default"];
+          }
+          if (!mergedSettings.unlockedSkins.includes(mergedSettings.equippedSkin)) {
+            mergedSettings.equippedSkin = "default";
+          }
+          if (!Array.isArray(mergedSettings.unlockedThemes) || !mergedSettings.unlockedThemes.length) {
+            mergedSettings.unlockedThemes = ["neon_nocturno"];
+          }
+          if (!mergedSettings.unlockedThemes.includes(mergedSettings.equippedTheme)) {
+            mergedSettings.equippedTheme = "neon_nocturno";
+          }
+          if (!Array.isArray(mergedSettings.unlockedMusic) || !mergedSettings.unlockedMusic.length) mergedSettings.unlockedMusic = ["neon_base"];
+          if (!mergedSettings.unlockedMusic.includes(mergedSettings.equippedMusic)) mergedSettings.equippedMusic = "neon_base";
+          if (!Array.isArray(mergedSettings.unlockedTrails) || !mergedSettings.unlockedTrails.length) mergedSettings.unlockedTrails = ["sin_estela"];
+          if (!mergedSettings.unlockedTrails.includes(mergedSettings.equippedTrail)) mergedSettings.equippedTrail = "sin_estela";
+          mergedSettings.randomSkin = !!mergedSettings.randomSkin; mergedSettings.randomTheme = !!mergedSettings.randomTheme;
+          mergedSettings.randomMusic = !!mergedSettings.randomMusic; mergedSettings.randomTrail = !!mergedSettings.randomTrail;
+
+          return {
+            settings: mergedSettings,
+            coinsBalance: typeof parsed.coinsBalance === "number" ? parsed.coinsBalance : fallback.coinsBalance,
+            stats: { ...fallback.stats, ...(parsed.stats || {}) },
+            leaderboard: Array.isArray(parsed.leaderboard) && parsed.leaderboard.length ? parsed.leaderboard : fallback.leaderboard,
+            missions: Array.isArray(parsed.missions) && parsed.missions.length === 3 ? parsed.missions : createDefaultMissions()
+          };
+        } catch (err) {
+          return fallback;
+        }
+      }
+
+      const appData = loadStateFromStorage();
+
+      function persistData() {
+        try {
+          localStorage.setItem(STORE_KEY, JSON.stringify({
+            settings: appData.settings,
+            coinsBalance: appData.coinsBalance,
+            stats: appData.stats,
+            leaderboard: appData.leaderboard,
+            missions: appData.missions
+          }));
+        } catch (err) {}
+      }
+
+      // =========================================================================
+      // 5. MOTOR DE AUDIO SYNTHWAVE PROCEDURAL (WEB AUDIO API) + HÁPTICA
+      // =========================================================================
+      const soundEngine = {
+        ctx: null,
+        isPlaying: false,
+        stepTimer: null,
+        step: 0,
+        init() {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+          }
+          if (this.ctx && this.ctx.state === "suspended") {
+            this.ctx.resume().catch(() => {});
+          }
+        },
+        getGain() {
+          return Math.max(0, Math.min(1, (appData.settings.volume || 0) / 100));
+        },
+        playTone(freq, type, duration, volMult, slideFreq) {
+          if (!appData.settings.sfx) return;
+          this.init();
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+          if (slideFreq) {
+            osc.frequency.exponentialRampToValueAtTime(slideFreq, now + duration);
+          }
+          const vol = Math.max(0.001, this.getGain() * volMult);
+          gain.gain.setValueAtTime(vol, now);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration);
+        },
+        sfxJump() {
+          this.playTone(260, "triangle", 0.14, 0.24, 620);
+        },
+        sfxFastFall() {
+          this.playTone(460, "sine", 0.11, 0.20, 140);
+        },
+        sfxCoin() {
+          this.playTone(880, "sine", 0.11, 0.22, 1320);
+        },
+        sfxHit() {
+          this.playTone(170, "sawtooth", 0.24, 0.30, 52);
+        },
+        sfxLose() {
+          this.playTone(220, "sawtooth", 0.45, 0.28, 48);
+        },
+        playMusicNote(freq, type, duration, volMult) {
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type; osc.frequency.setValueAtTime(freq, now);
+          const vol = Math.max(0.001, this.getGain() * volMult);
+          gain.gain.setValueAtTime(vol, now);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(now); osc.stop(now + duration);
+        },
+        startMusic() {
+          if (!appData.settings.music || this.isPlaying) return;
+          this.init(); if (!this.ctx) return;
+          this.isPlaying = true; this.step = 0;
+          const track = getActiveMusic();
+          const stepMs = Math.max(120, Math.round(60000 / track.bpm / 2)); // corcheas
+          this.stepTimer = setInterval(() => {
+            if (!appData.settings.music || !this.isPlaying || document.hidden) return;
+            if (uiState.screen === "game" && uiState.paused) return;
+            const t = getActiveMusic(); const i = this.step % 8; this.step++;
+            const bassIdx = t.bass[i]; if (bassIdx >= 0) this.playMusicNote(MUSIC_SCALE[bassIdx], t.wave, 0.19, 0.065);
+            const leadIdx = t.lead[i]; if (leadIdx >= 0) this.playMusicNote(MUSIC_SCALE[leadIdx], t.wave === "square" ? "triangle" : "sine", 0.16, t.leadVol);
+            if (t.hat && i % 2 === 1) this.playMusicNote(5200, "sine", 0.03, 0.012);
+          }, stepMs);
+        },
+        restartMusic() { this.stopMusic(); if (appData.settings.music) this.startMusic(); },
+        stopMusic() {
+          this.isPlaying = false;
+          if (this.stepTimer) {
+            clearInterval(this.stepTimer);
+            this.stepTimer = null;
+          }
+        }
+      };
+
+      function triggerVibrate(ms) {
+        if (!appData.settings.vibration) return;
+        if (navigator.vibrate) {
+          try { navigator.vibrate(ms); } catch (e) {}
+        }
+      }
+
+      // =========================================================================
+      // 6. SALIDA NATIVA REAL PARA ANDROID / WEBVIEW / CAPACITOR / CORDOVA
+      // =========================================================================
+      function exitAndroidApplication() {
+        soundEngine.stopMusic();
+        persistData();
+
+        // 1. Puentes nativos comunes en Android WebView / APK Builders
+        const bridges = [
+          window.Android,
+          window.AndroidInterface,
+          window.AppInventor,
+          window.Kodular,
+          window.Niotron,
+          window.WebViewBridge,
+          window.JSInterface
+        ];
+
+        for (let i = 0; i < bridges.length; i++) {
+          const b = bridges[i];
+          if (!b) continue;
+          try {
+            if (typeof b.exitApp === "function") { b.exitApp(); return; }
+            if (typeof b.closeApp === "function") { b.closeApp(); return; }
+            if (typeof b.finish === "function") { b.finish(); return; }
+            if (typeof b.finishActivity === "function") { b.finishActivity(); return; }
+            if (typeof b.quit === "function") { b.quit(); return; }
+          } catch (e) {}
+        }
+
+        // 2. Capacitor / Cordova / Ionic
+        try {
+          if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.exitApp === "function") {
+            window.Capacitor.Plugins.App.exitApp();
+            return;
+          }
+        } catch (e) {}
+
+        try {
+          if (navigator.app && typeof navigator.app.exitApp === "function") {
+            navigator.app.exitApp();
+            return;
+          }
+        } catch (e) {}
+
+        // 3. Flutter InAppWebView / React Native WebView
+        try {
+          if (window.flutter_inappwebview && typeof window.flutter_inappwebview.callHandler === "function") {
+            window.flutter_inappwebview.callHandler("exitApp");
+            return;
+          }
+        } catch (e) {}
+
+        try {
+          if (window.ReactNativeWebView && typeof window.ReactNativeWebView.postMessage === "function") {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: "EXIT_APP" }));
+          }
+        } catch (e) {}
+
+        // 4. Cierre estándar de pestaña/ventana WebView + respaldo si el contenedor bloquea window.close()
+        try { window.open("", "_self"); } catch (e) {}
+        try { window.close(); } catch (e) {}
+
+        setTimeout(() => {
+          uiState.exitModalOpen = false;
+          showToast("Progreso guardado. Usa el botón Atrás de Android para cerrar.");
+        }, 250);
+      }
+
+      // =========================================================================
+      // 7. ESTADO DE UI, CACHE DE GRADIENTES Y HELPERS
+      // =========================================================================
+      const uiState = {
+        screen: "menu", // menu | shop | tournament | settings | game
+        shopTab: "skins", // skins | themes
+        paused: false,
+        gameOver: false,
+        resumeCountdown: 0,
+        aliasModalOpen: false,
+        pendingPlayAfterAlias: false,
+        exitModalOpen: false,
+        toastMsg: "",
+        toastTimer: null,
+        lastRunSummary: null,
+        isNewRecordRun: false
+      };
+
+      // Cache de gradientes del canvas para cero asignaciones innecesarias por frame (más FPS)
+      const canvasCache = {
+        key: "",
+        skyGrad: null,
+        moonGrad: null
+      };
+
+      function getActiveSkin() {
+        return NEON_SKINS.find((s) => s.id === appData.settings.equippedSkin) || NEON_SKINS[0];
+      }
+
+      function getActiveMusic() { return MUSIC_TRACKS.find((t) => t.id === appData.settings.equippedMusic) || MUSIC_TRACKS[0]; }
+      function getActiveTrail() { return SHIP_TRAILS.find((t) => t.id === appData.settings.equippedTrail) || SHIP_TRAILS[0]; }
+      // Aleatorio: solo entre lo YA comprado. Si solo hay 1, no cambia (evita repetir el mismo).
+      function pickRandomOwned(list, unlocked, currentId) {
+        const owned = list.filter((x) => unlocked.includes(x.id));
+        if (owned.length <= 1) return null;
+        let next = currentId;
+        while (next === currentId) next = owned[Math.floor(Math.random() * owned.length)].id;
+        return next;
+      }
+      function applyRandomCategory(cat) {
+        const s = appData.settings;
+        let next = null, label = "";
+        if (cat === "skins") { next = pickRandomOwned(NEON_SKINS, s.unlockedSkins, s.equippedSkin); if (next) { s.equippedSkin = next; label = NEON_SKINS.find((x) => x.id === next).name; } }
+        if (cat === "themes") { next = pickRandomOwned(INTERFACE_THEMES, s.unlockedThemes, s.equippedTheme); if (next) { s.equippedTheme = next; canvasCache.key = ""; label = INTERFACE_THEMES.find((x) => x.id === next).name; } }
+        if (cat === "music") { next = pickRandomOwned(MUSIC_TRACKS, s.unlockedMusic, s.equippedMusic); if (next) { s.equippedMusic = next; soundEngine.restartMusic(); label = MUSIC_TRACKS.find((x) => x.id === next).name; } }
+        if (cat === "trails") { next = pickRandomOwned(SHIP_TRAILS, s.unlockedTrails, s.equippedTrail); if (next) { s.equippedTrail = next; label = SHIP_TRAILS.find((x) => x.id === next).name; } }
+        if (!next) { showToast("Compra al menos 2 artículos en esta categoría para usar Aleatorio."); return; }
+        persistData(); showToast(`🎲 Aleatorio: ${label}`);
+      }
+      function applyRandomOnNewRun() {
+        const s = appData.settings; let changed = false;
+        if (s.randomSkin) { const n = pickRandomOwned(NEON_SKINS, s.unlockedSkins, s.equippedSkin); if (n) { s.equippedSkin = n; changed = true; } }
+        if (s.randomTheme) { const n = pickRandomOwned(INTERFACE_THEMES, s.unlockedThemes, s.equippedTheme); if (n) { s.equippedTheme = n; canvasCache.key = ""; changed = true; } }
+        if (s.randomMusic) { const n = pickRandomOwned(MUSIC_TRACKS, s.unlockedMusic, s.equippedMusic); if (n) { s.equippedMusic = n; changed = true; } }
+        if (s.randomTrail) { const n = pickRandomOwned(SHIP_TRAILS, s.unlockedTrails, s.equippedTrail); if (n) { s.equippedTrail = n; changed = true; } }
+        if (changed) persistData();
+      }
+      function getActiveTheme() {
+        return INTERFACE_THEMES.find((t) => t.id === appData.settings.equippedTheme) || INTERFACE_THEMES[0];
+      }
+
+      function showToast(msg) {
+        uiState.toastMsg = msg;
+        if (uiState.toastTimer) clearTimeout(uiState.toastTimer);
+        renderApp();
+        uiState.toastTimer = setTimeout(() => {
+          uiState.toastMsg = "";
+          renderApp();
+        }, 2600);
+      }
+
+      function hexToRgb(hex) {
+        if (!hex || typeof hex !== "string" || !hex.startsWith("#")) return null;
+        const clean = hex.slice(1);
+        const full = clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean;
+        if (full.length !== 6) return null;
+        const n = parseInt(full, 16);
+        if (Number.isNaN(n)) return null;
+        return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+      }
+
+      function lerpHex(hexA, hexB, t) {
+        const a = hexToRgb(hexA);
+        const b = hexToRgb(hexB);
+        if (!a || !b) return hexB || hexA || "#070812";
+        const k = Math.max(0, Math.min(1, t));
+        const r = Math.round(a.r + (b.r - a.r) * k);
+        const g = Math.round(a.g + (b.g - a.g) * k);
+        const bl = Math.round(a.b + (b.b - a.b) * k);
+        return `rgb(${r},${g},${bl})`;
+      }
+
+      function getBiomeColors(meters, baseTheme) {
+        let cur = BIOME_STAGES[0];
+        let nxt = null;
+        let blend = 0;
+
+        for (let i = 0; i < BIOME_STAGES.length; i++) {
+          if (meters >= BIOME_STAGES[i].minMeters) {
+            cur = BIOME_STAGES[i];
+            nxt = BIOME_STAGES[i + 1] || null;
+          }
+        }
+
+        if (nxt) {
+          const transitionZone = 90;
+          const startAt = nxt.minMeters - transitionZone;
+          if (meters >= startAt) {
+            blend = Math.min(1, (meters - startAt) / transitionZone);
+          }
+        }
+
+        const baseTop = cur.skyTopShift || baseTheme.skyTop;
+        const targetTop = (nxt && nxt.skyTopShift) ? nxt.skyTopShift : baseTop;
+        const skyTop = blend > 0 ? lerpHex(baseTop, targetTop, blend) : baseTop;
+
+        const baseGrid = cur.gridAccent || baseTheme.gridV;
+        const targetGrid = (nxt && nxt.gridAccent) ? nxt.gridAccent : baseGrid;
+        const gridV = blend > 0 ? lerpHex(baseGrid, targetGrid, blend) : baseGrid;
+
+        return { skyTop, gridV };
+      }
+
+      function getNextMilestone(currentMeters) {
+        const fixed = [100, 250, 500, 750, 1000];
+        for (let i = 0; i < fixed.length; i++) {
+          if (currentMeters < fixed[i]) return fixed[i];
+        }
+        return (Math.floor(currentMeters / 500) + 1) * 500;
+      }
+
+      function computeVisualMultiplier(streak) {
+        return Math.min(1.85, 1 + Math.floor(streak / 3) * 0.05);
+      }
+
+      function getSortedLeaderboard() {
+        const list = appData.leaderboard.map((item) => ({ ...item }));
+        const alias = (appData.settings.playerName || "").trim();
+        if (alias) {
+          const existing = list.find((p) => p.id === "local_player");
+          if (existing) {
+            existing.name = alias;
+            existing.totalScore = appData.stats.totalScore;
+            existing.bestRun = appData.stats.bestRunDistance;
+            existing.games = appData.stats.gamesPlayed;
+          } else {
+            list.push({
+              id: "local_player",
+              name: alias,
+              totalScore: appData.stats.totalScore,
+              bestRun: appData.stats.bestRunDistance,
+              games: appData.stats.gamesPlayed
+            });
+          }
+        }
+        return list.sort((a, b) => b.totalScore - a.totalScore || b.bestRun - a.bestRun);
+      }
+
+      // =========================================================================
+      // 8. MOTOR DEL JUEGO CANVAS 2D (360x480) - OPTIMIZADO PARA MÓVIL
+      // =========================================================================
+      let game = null;
+      let rafId = 0;
+      let lastFrameTime = 0;
+      let fpsFrames = 0;
+      let fpsAccum = 0;
+      let currentFps = 60;
+      let resumeInterval = null;
+      let lastTapTime = 0;
+      let lastJumpStamp = 0;
+
+      function initGameSession() {
+        applyRandomOnNewRun();
+        const stars = Array.from({ length: 40 }, (_, i) => ({
+          x: (i * 97) % 360,
+          y: 16 + ((i * 53) % 245),
+          r: i % 5 === 0 ? 1.7 : (i % 2 === 0 ? 1.1 : 0.75),
+          phase: i * 0.7
+        }));
+
+        const farBuildings = Array.from({ length: 8 }, (_, i) => ({
+          x: i * 68,
+          w: 42 + (i % 3) * 12,
+          h: 110 + ((i * 37) % 85),
+          hue: i % 2 === 0 ? CYAN : PINK
+        }));
+
+        const nearBuildings = Array.from({ length: 7 }, (_, i) => ({
+          x: i * 78,
+          w: 50 + (i % 2) * 16,
+          h: 75 + ((i * 43) % 65),
+          rows: 4 + (i % 3),
+          cols: 3,
+          accent: i % 3 === 0 ? GOLD : (i % 2 === 0 ? CYAN : PINK)
+        }));
+
+        game = {
+          y: 380,
+          vy: 0,
+          grounded: true,
+          jumpBuffer: 0,
+          fastFalling: false,
+          trail: [],
+          shockwaves: [],
+          hitstopTimer: 0,
+          obstacles: [],
+          coins: [],
+          parts: [],
+          bannerText: "",
+          bannerSub: "",
+          bannerColor: CYAN,
+          bannerTimer: 0,
+          rawDist: 0,
+          meters: 0,
+          nextMilestone: 100,
+          prevBestAtStart: appData.stats.bestRunDistance || 0,
+          liveRecordBeat: false,
+          recordMarkerPassed: false,
+          coinCount: 0,
+          streak: 0,
+          hearts: 3,
+          invuln: 0,
+          nextObs: 360,
+          nextCoin: 250,
+          frame: 0,
+          shake: 0,
+          hitFlash: 0,
+          finished: false,
+          elapsed: 0,
+          speedMult: 1,
+          baseSpeed: 300,
+          speed: 300,
+          stars,
+          farBuildings,
+          nearBuildings
+        };
+
+        lastTapTime = 0;
+        uiState.paused = false;
+        uiState.gameOver = false;
+        uiState.resumeCountdown = 0;
+        uiState.lastRunSummary = null;
+        uiState.isNewRecordRun = false;
+        uiState.screen = "game";
+
+        soundEngine.init();
+        if (appData.settings.music) soundEngine.startMusic();
+
+        renderApp();
+        startLoop();
+      }
+
+      function triggerBanner(text, sub, color) {
+        if (!game) return;
+        game.bannerText = text;
+        game.bannerSub = sub || "";
+        game.bannerColor = color || CYAN;
+        game.bannerTimer = 80;
+      }
+
+      function executeJump() {
+        if (!game) return;
+        game.vy = -900;
+        game.grounded = false;
+        game.fastFalling = false;
+        game.jumpBuffer = 0;
+        soundEngine.sfxJump();
+        triggerVibrate(15);
+        if (game.parts.length < 45) {
+          for (let i = 0; i < 7; i++) {
+            game.parts.push({
+              x: 68 + (Math.random() - 0.5) * 14,
+              y: 412,
+              vx: (Math.random() - 0.5) * 210,
+              vy: Math.random() * 120 + 48,
+              life: 0.32,
+              maxLife: 0.32,
+              c: i % 2 === 0 ? CYAN : PINK
+            });
+          }
+        }
+      }
+
+      function requestJump() {
+        const now = performance.now();
+        if (now - lastJumpStamp < 45) return;
+        lastJumpStamp = now;
+        if (!game || uiState.screen !== "game" || uiState.paused || uiState.gameOver || uiState.resumeCountdown > 0) return;
+        if (game.grounded) {
+          executeJump();
+        } else {
+          game.jumpBuffer = 0.14;
+        }
+      }
+
+      function requestFastFall() {
+        if (!game || uiState.screen !== "game" || uiState.paused || uiState.gameOver || uiState.resumeCountdown > 0) return;
+        if (!game.grounded && !game.fastFalling) {
+          game.fastFalling = true;
+          game.jumpBuffer = 0;
+          game.vy = Math.max(game.vy + 620, 720);
+          soundEngine.sfxFastFall();
+          triggerVibrate(12);
+        }
+      }
+
+      // Control táctil único en canvas: 1 toque salta, doble toque en el aire baja rápido
+      function handleCanvasTouchAction() {
+        if (!game || uiState.screen !== "game" || uiState.paused || uiState.gameOver || uiState.resumeCountdown > 0) return;
+        const now = performance.now();
+        const delta = now - lastTapTime;
+        lastTapTime = now;
+
+        if (!game.grounded && delta > 35 && delta <= 270) {
+          requestFastFall();
+          return;
+        }
+        requestJump();
+      }
+
+      function beginResumeCountdown() {
+        if (uiState.resumeCountdown > 0) return;
+        uiState.paused = false;
+        uiState.resumeCountdown = 3;
+        renderApp();
+        if (resumeInterval) clearInterval(resumeInterval);
+        resumeInterval = setInterval(() => {
+          uiState.resumeCountdown--;
+          if (uiState.resumeCountdown <= 0) {
+            uiState.resumeCountdown = 0;
+            clearInterval(resumeInterval);
+            resumeInterval = null;
+          }
+          renderApp();
+        }, 550);
+      }
+
+      function updateSessionMissions() {
+        if (!game) return;
+        let changed = false;
+        for (let i = 0; i < appData.missions.length; i++) {
+          const m = appData.missions[i];
+          let val = m.current;
+          if (m.id === "m_dist") val = Math.max(m.current, game.meters);
+          else if (m.id === "m_streak") val = Math.max(m.current, game.streak);
+          else if (m.id === "m_coins") val = Math.max(m.current, game.coinCount);
+          if (val !== m.current) {
+            m.current = val;
+            changed = true;
+          }
+          if (!m.claimed && m.current >= m.target) {
+            m.claimed = true;
+            appData.coinsBalance += m.reward;
+            appData.stats.totalCoinsEarned += m.reward;
+            changed = true;
+            soundEngine.sfxCoin();
+            triggerBanner("MISIÓN CUMPLIDA", `+${m.reward} monedas para Tienda`, GOLD);
+          }
+        }
+        if (changed) {
+          persistData();
+          updateGameHudDOM();
+        }
+      }
+
+      function finalizeGameOver() {
+        if (!game || game.finished) return;
+        game.finished = true;
+        uiState.gameOver = true;
+        soundEngine.sfxLose();
+
+        const finalMeters = game.meters;
+        const coinsEarned = game.coinCount;
+        const beatRecord = finalMeters > (appData.stats.bestRunDistance || 0);
+
+        appData.stats.gamesPlayed += 1;
+        appData.stats.totalScore += finalMeters;
+        appData.coinsBalance += coinsEarned;
+        appData.stats.totalCoinsEarned += coinsEarned;
+        if (beatRecord) {
+          appData.stats.bestRunDistance = finalMeters;
+        }
+
+        uiState.isNewRecordRun = beatRecord;
+        uiState.lastRunSummary = {
+          distance: finalMeters,
+          score: finalMeters,
+          coins: coinsEarned,
+          totalAccumulated: appData.stats.totalScore
+        };
+
+        persistData();
+        renderApp();
+      }
+
+      function startLoop() {
+        if (rafId) cancelAnimationFrame(rafId);
+        lastFrameTime = performance.now();
+        fpsFrames = 0;
+        fpsAccum = 0;
+
+        function tick(now) {
+          if (uiState.screen !== "game" || !game) return;
+          rafId = requestAnimationFrame(tick);
+
+          const rawDt = Math.max(0, (now - lastFrameTime) / 1000);
+          lastFrameTime = now;
+          const dt = Math.min(0.05, rawDt);
+
+          if (rawDt > 0) {
+            fpsFrames++;
+            fpsAccum += rawDt;
+            if (fpsAccum >= 0.35) {
+              currentFps = Math.max(1, Math.min(240, Math.round(fpsFrames / fpsAccum)));
+              fpsFrames = 0;
+              fpsAccum = 0;
+            }
+          }
+
+          const stepScale = dt * 60;
+          const theme = getActiveTheme();
+          const skin = getActiveSkin();
+
+          if (!uiState.paused && !uiState.gameOver && !document.hidden && uiState.resumeCountdown === 0) {
+            if (game.hitstopTimer > 0) {
+              game.hitstopTimer = Math.max(0, game.hitstopTimer - dt);
+              if (game.shake > 0) game.shake = Math.max(0, game.shake - stepScale);
+            } else {
+              game.frame++;
+              game.elapsed += dt;
+
+              const diffProgress = Math.min(1, game.elapsed / 150);
+              game.speedMult = 1 + diffProgress * 0.85;
+              game.speed = game.baseSpeed * game.speedMult;
+
+              const dx = game.speed * dt;
+              game.rawDist += dx * 0.14;
+              game.meters = Math.floor(game.rawDist);
+
+              if (game.meters >= game.nextMilestone) {
+                const reached = game.nextMilestone;
+                triggerBanner(`HITO ${reached}m`, "Meta de torneo alcanzada", theme.accent);
+                game.nextMilestone = getNextMilestone(reached);
+              }
+
+              if (game.prevBestAtStart > 0 && !game.liveRecordBeat && game.meters > game.prevBestAtStart) {
+                game.liveRecordBeat = true;
+                game.recordMarkerPassed = true;
+                triggerBanner("★ RÉCORD EN VIVO", `Superaste ${game.prevBestAtStart}m`, GOLD);
+              }
+
+              if (game.bannerTimer > 0) game.bannerTimer = Math.max(0, game.bannerTimer - stepScale);
+              if (game.jumpBuffer > 0) game.jumpBuffer = Math.max(0, game.jumpBuffer - dt);
+
+              const gravity = game.fastFalling ? 5850 : 3168;
+              game.vy += gravity * dt;
+              game.y += game.vy * dt;
+              if (game.y >= 380) {
+                game.y = 380;
+                game.vy = 0;
+                game.grounded = true;
+                game.fastFalling = false;
+                if (game.jumpBuffer > 0) executeJump();
+              }
+
+              game.trail.unshift({ y: game.y + 17 });
+              const maxTrail = game.streak >= 20 ? 11 : (game.streak >= 10 ? 8 : 6);
+              if (game.trail.length > maxTrail) game.trail.length = maxTrail;
+              for (let i = 0; i < game.trail.length; i++) {
+                game.trail[i].x = 75 - (i + 1) * 7.2;
+              }
+
+              if (game.invuln > 0) game.invuln = Math.max(0, game.invuln - stepScale);
+              if (game.hitFlash > 0) game.hitFlash = Math.max(0, game.hitFlash - stepScale);
+
+              for (let i = game.shockwaves.length - 1; i >= 0; i--) {
+                const sw = game.shockwaves[i];
+                sw.r += 180 * dt;
+                sw.life -= dt;
+                if (sw.life <= 0) game.shockwaves.splice(i, 1);
+              }
+
+              // Generación de obstáculos
+              game.nextObs -= dx;
+              if (game.nextObs <= 0) {
+                const coinConflict = game.coins.some((c) => !c.taken && c.x > 250 && c.x < 540);
+                if (coinConflict) {
+                  game.nextObs = Math.max(45, (game.speed / 60) * 9);
+                } else {
+                  const pal1 = OBS_PALETTES[Math.floor(Math.random() * OBS_PALETTES.length)];
+                  const pal2 = OBS_PALETTES[Math.floor(Math.random() * OBS_PALETTES.length)];
+                  const roll = Math.random();
+                  const canOscillate = game.meters >= 400 && Math.random() < 0.35;
+
+                  if (diffProgress < 0.15 || roll < 0.55) {
+                    const isSpike = Math.random() > 0.45;
+                    const w = isSpike ? (26 + Math.random() * 14) : (24 + Math.random() * 18);
+                    const baseH = 38 + Math.random() * 32;
+                    game.obstacles.push({
+                      x: 380,
+                      w,
+                      baseH,
+                      h: baseH,
+                      spike: isSpike,
+                      pal: pal1,
+                      passed: false,
+                      oscillate: canOscillate,
+                      oscPhase: Math.random() * Math.PI * 2
+                    });
+                  } else if (roll < 0.82) {
+                    const h1 = 34 + Math.random() * 18;
+                    const h2 = 42 + Math.random() * 24;
+                    const gap = 28 + Math.random() * 18;
+                    game.obstacles.push(
+                      { x: 380, w: 24, baseH: h1, h: h1, spike: Math.random() > 0.5, pal: pal1, passed: false, oscillate: false, oscPhase: 0 },
+                      { x: 380 + gap, w: 26, baseH: h2, h: h2, spike: Math.random() > 0.4, pal: pal2, passed: false, oscillate: canOscillate, oscPhase: 1.2 }
+                    );
+                  } else {
+                    const baseH = 42 + Math.random() * 20;
+                    game.obstacles.push({
+                      x: 380,
+                      w: 30,
+                      baseH,
+                      h: baseH,
+                      spike: true,
+                      pal: pal1,
+                      passed: false,
+                      oscillate: false,
+                      oscPhase: 0
+                    });
+                    const variant = COIN_VARIANTS[Math.floor(Math.random() * COIN_VARIANTS.length)];
+                    for (let j = 0; j < 3; j++) {
+                      const arcY = 315 - Math.sin((j / 2) * Math.PI) * 26;
+                      game.coins.push({
+                        x: 365 + j * 30,
+                        y: arcY,
+                        taken: false,
+                        variant,
+                        spin: j * 0.4
+                      });
+                    }
+                  }
+
+                  const minGap = Math.max(195, 290 - diffProgress * 85);
+                  game.nextObs = minGap + Math.random() * 95;
+                }
+              }
+
+              // Generación de monedas
+              game.nextCoin -= dx;
+              if (game.nextCoin <= 0) {
+                const blocked = game.obstacles.some((o) => o.x + o.w > 240 && o.x < 560);
+                if (!blocked) {
+                  const patternType = Math.floor(Math.random() * 4);
+                  const variant = COIN_VARIANTS[Math.floor(Math.random() * COIN_VARIANTS.length)];
+                  if (patternType === 0) {
+                    for (let j = 0; j < 5; j++) {
+                      const arc = Math.sin((j / 4) * Math.PI) * -42;
+                      game.coins.push({ x: 380 + j * 30, y: 362 + arc, taken: false, variant, spin: j * 0.3 });
+                    }
+                  } else if (patternType === 1) {
+                    for (let j = 0; j < 4; j++) {
+                      game.coins.push({ x: 380 + j * 32, y: 374, taken: false, variant, spin: j * 0.3 });
+                    }
+                  } else if (patternType === 2) {
+                    for (let j = 0; j < 4; j++) {
+                      game.coins.push({ x: 380 + j * 32, y: 318, taken: false, variant, spin: j * 0.3 });
+                    }
+                  } else {
+                    for (let j = 0; j < 5; j++) {
+                      const vMix = COIN_VARIANTS[j % COIN_VARIANTS.length];
+                      game.coins.push({
+                        x: 380 + j * 30,
+                        y: j % 2 === 0 ? 372 : 334,
+                        taken: false,
+                        variant: vMix,
+                        spin: j * 0.5
+                      });
+                    }
+                  }
+                }
+                game.nextCoin = 280 + Math.random() * 250;
+              }
+
+              // Obstáculos y racha
+              for (let i = game.obstacles.length - 1; i >= 0; i--) {
+                const o = game.obstacles[i];
+                o.x -= dx;
+                if (o.oscillate) {
+                  o.oscPhase += 3.4 * dt;
+                  o.h = Math.max(26, o.baseH + Math.sin(o.oscPhase) * 14);
+                }
+                if (!o.passed && o.x + o.w < 58) {
+                  o.passed = true;
+                  game.streak++;
+                }
+                if (o.x <= -60) game.obstacles.splice(i, 1);
+              }
+
+              // Monedas y magnetismo a racha 15+
+              const magnetOn = game.streak >= 15;
+              const shipX = 75;
+              const shipY = game.y + 17;
+
+              for (let i = game.coins.length - 1; i >= 0; i--) {
+                const c = game.coins[i];
+                if (magnetOn && !c.taken) {
+                  const dxC = shipX - c.x;
+                  const dyC = shipY - c.y;
+                  const distSq = dxC * dxC + dyC * dyC;
+                  if (distSq < 19600 && distSq > 1) {
+                    const dist = Math.sqrt(distSq);
+                    const pull = 290 * dt;
+                    c.x += (dxC / dist) * pull;
+                    c.y += (dyC / dist) * pull;
+                  } else {
+                    c.x -= dx;
+                  }
+                } else {
+                  c.x -= dx;
+                }
+                c.spin += 4.8 * dt;
+
+                if (!c.taken && c.x + 12 > 58 && c.x - 12 < 92 && c.y + 12 > game.y && c.y - 12 < game.y + 34) {
+                  c.taken = true;
+                  game.coinCount++;
+                  soundEngine.sfxCoin();
+                  triggerVibrate(16);
+                  if (game.parts.length < 48) {
+                    for (let j = 0; j < 8; j++) {
+                      game.parts.push({
+                        x: c.x,
+                        y: c.y,
+                        vx: (Math.random() - 0.5) * 310,
+                        vy: (Math.random() - 0.5) * 310,
+                        life: 0.34,
+                        maxLife: 0.34,
+                        c: c.variant.fill
+                      });
+                    }
+                  }
+                }
+
+                if (c.x <= -60 || c.taken) {
+                  game.coins.splice(i, 1);
+                }
+              }
+
+              // Colisiones con obstáculos
+              if (game.invuln === 0) {
+                for (let i = 0; i < game.obstacles.length; i++) {
+                  const o = game.obstacles[i];
+                  if (game.invuln === 0 && 89 > o.x + 4 && 59 < o.x + o.w - 4 && game.y + 32 > 416 - o.h) {
+                    game.hearts--;
+                    game.streak = 0;
+                    game.invuln = 90;
+                    game.shake = 12;
+                    game.hitFlash = 10;
+                    game.hitstopTimer = 0.045;
+                    game.shockwaves.push({
+                      x: 75,
+                      y: game.y + 17,
+                      r: 10,
+                      life: 0.36,
+                      maxLife: 0.36,
+                      c: o.pal.main
+                    });
+                    soundEngine.sfxHit();
+                    triggerVibrate(105);
+                    for (let j = 0; j < 12; j++) {
+                      game.parts.push({
+                        x: 75,
+                        y: game.y + 16,
+                        vx: (Math.random() - 0.5) * 360,
+                        vy: (Math.random() - 0.5) * 360,
+                        life: 0.38,
+                        maxLife: 0.38,
+                        c: o.pal.main
+                      });
+                    }
+                    if (game.hearts <= 0) {
+                      finalizeGameOver();
+                    }
+                    break;
+                  }
+                }
+              }
+
+              for (let i = game.parts.length - 1; i >= 0; i--) {
+                const pt = game.parts[i];
+                pt.x += pt.vx * dt;
+                pt.y += pt.vy * dt;
+                pt.life -= dt;
+                if (pt.life <= 0) game.parts.splice(i, 1);
+              }
+              if (game.shake > 0) game.shake = Math.max(0, game.shake - stepScale);
+
+              updateSessionMissions();
+            }
+
+            if (game.frame % 4 === 0) {
+              updateGameHudDOM();
+            }
+          }
+
+          renderGameCanvas(theme, skin);
+        }
+
+        rafId = requestAnimationFrame(tick);
+      }
+
+      // =========================================================================
+      // 9. RENDERIZADO CANVAS 2D OPTIMIZADO PARA ALTOS FPS EN MÓVIL
+      // =========================================================================
+      function renderGameCanvas(theme, skin) {
+        const canvas = document.getElementById("gameCanvas");
+        if (!canvas || !game) return;
+        const ctx = canvas.getContext("2d", { alpha: false });
+        const W = 360;
+        const H = 480;
+        const biome = getBiomeColors(game.meters, theme);
+
+        // Actualizar cache de gradientes solo cuando cambian colores
+        const cacheKey = `${theme.id}|${biome.skyTop}`;
+        if (canvasCache.key !== cacheKey) {
+          canvasCache.key = cacheKey;
+          const sg = ctx.createLinearGradient(0, 0, 0, 416);
+          sg.addColorStop(0, biome.skyTop);
+          sg.addColorStop(0.5, theme.skyMid);
+          sg.addColorStop(0.85, theme.skyLow);
+          sg.addColorStop(1, theme.skyHorizon);
+          canvasCache.skyGrad = sg;
+
+          const mg = ctx.createLinearGradient(272, 60, 272, 136);
+          mg.addColorStop(0, theme.moonTop);
+          mg.addColorStop(0.55, theme.moonMid);
+          mg.addColorStop(1, theme.moonBot);
+          canvasCache.moonGrad = mg;
+        }
+
+        ctx.save();
+        if (game.shake > 0) {
+          ctx.translate((Math.random() - 0.5) * game.shake, (Math.random() - 0.5) * game.shake);
+        }
+
+        // 1. Cielo degradado cacheado
+        ctx.fillStyle = canvasCache.skyGrad;
+        ctx.fillRect(0, 0, W, H);
+
+        // 1.5 Atmósfera especial del tema (Aurora boreal / Rayos solares / Nebulosa)
+        if (theme.atmosphere === "aurora") {
+          ctx.save();
+          const waveY = 58 + Math.sin(game.elapsed * 1.1) * 8;
+          ctx.fillStyle = "rgba(52, 211, 153, 0.11)";
+          ctx.beginPath();
+          ctx.moveTo(0, waveY);
+          ctx.quadraticCurveTo(110, waveY - 24, 220, waveY + 10);
+          ctx.quadraticCurveTo(300, waveY + 26, W, waveY - 8);
+          ctx.lineTo(W, waveY + 42);
+          ctx.quadraticCurveTo(240, waveY + 58, 120, waveY + 24);
+          ctx.quadraticCurveTo(45, waveY + 12, 0, waveY + 34);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        } else if (theme.atmosphere === "solar") {
+          ctx.save();
+          ctx.fillStyle = "rgba(255, 183, 3, 0.08)";
+          ctx.beginPath();
+          ctx.arc(272, 98, 86, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // 2. Luna Outrun con halo eficiente (sin shadowBlur costoso en móvil) y cortes horizontales
+        const moonX = 272;
+        const moonY = 98;
+        const moonR = 38;
+        ctx.fillStyle = theme.moonRing;
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, moonR + 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = canvasCache.moonGrad;
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = theme.moonCut;
+        for (let sy = moonY + 4; sy < moonY + moonR; sy += 7) {
+          ctx.fillRect(moonX - moonR, sy, moonR * 2, 2.2);
+        }
+
+        // 3. Estrellas parpadeantes
+        for (let i = 0; i < game.stars.length; i++) {
+          const st = game.stars[i];
+          const alpha = 0.35 + 0.65 * Math.abs(Math.sin(game.elapsed * 2.2 + st.phase));
+          ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(2)})`;
+          ctx.fillRect(st.x - st.r, st.y - st.r, st.r * 2, st.r * 2);
+        }
+
+        // 4. Edificios lejanos en parallax
+        const farScroll = (game.rawDist * 11) % 544;
+        for (let i = 0; i < game.farBuildings.length; i++) {
+          const b = game.farBuildings[i];
+          let bx = b.x - farScroll;
+          if (bx + b.w < 0) bx += 544;
+          const by = 416 - b.h;
+          ctx.fillStyle = "rgba(10, 12, 30, 0.78)";
+          ctx.fillRect(bx, by, b.w, b.h);
+          ctx.strokeStyle = b.hue === CYAN ? "rgba(0, 240, 255, 0.25)" : "rgba(255, 46, 166, 0.25)";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(bx + 0.5, by + 0.5, b.w - 1, b.h);
+        }
+
+        // 5. Edificios cercanos con ventanas encendidas
+        const nearScroll = (game.rawDist * 22) % 546;
+        for (let i = 0; i < game.nearBuildings.length; i++) {
+          const b = game.nearBuildings[i];
+          let bx = b.x - nearScroll;
+          if (bx + b.w < 0) bx += 546;
+          const by = 416 - b.h;
+          ctx.fillStyle = "#080a1c";
+          ctx.fillRect(bx, by, b.w, b.h);
+          ctx.strokeStyle = b.accent;
+          ctx.globalAlpha = 0.42;
+          ctx.strokeRect(bx + 0.5, by + 0.5, b.w - 1, b.h);
+
+          ctx.fillStyle = b.accent;
+          ctx.globalAlpha = 0.34;
+          const padX = 7;
+          const padY = 9;
+          const cellW = (b.w - padX * 2) / b.cols;
+          const winW = Math.max(3, cellW - 5);
+          for (let r = 0; r < b.rows; r++) {
+            for (let c = 0; c < b.cols; c++) {
+              if ((r + c) % 2 === 0) {
+                ctx.fillRect(bx + padX + c * cellW + 2, by + padY + r * 12, winW, 5);
+              }
+            }
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        // 6. Suelo con rejilla synthwave en perspectiva
+        ctx.fillStyle = theme.groundBg;
+        ctx.fillRect(0, 416, W, 64);
+
+        // Baliza fantasma de récord personal
+        if (game.prevBestAtStart > 0 && !game.recordMarkerPassed) {
+          const deltaMeters = game.prevBestAtStart - game.meters;
+          const markerX = 75 + (deltaMeters / 0.14);
+          if (markerX >= -20 && markerX <= W + 24) {
+            ctx.save();
+            ctx.strokeStyle = GOLD;
+            ctx.setLineDash([4, 4]);
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(markerX, 344);
+            ctx.lineTo(markerX, 416);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = GOLD;
+            ctx.beginPath();
+            ctx.moveTo(markerX, 344);
+            ctx.lineTo(markerX + 18, 351);
+            ctx.lineTo(markerX, 358);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.font = "bold 9px 'Orbitron', system-ui, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(`RÉCORD ${game.prevBestAtStart}m`, markerX, 336);
+            ctx.restore();
+          }
+        }
+
+        // Línea de horizonte con doble halo rápido (cero shadowBlur lag)
+        ctx.fillStyle = theme.horizonLine;
+        ctx.globalAlpha = 0.28;
+        ctx.fillRect(0, 413, W, 9);
+        ctx.globalAlpha = 1;
+        ctx.fillRect(0, 416, W, 3);
+
+        // Líneas horizontales de la rejilla
+        ctx.strokeStyle = theme.gridH;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, 428); ctx.lineTo(W, 428);
+        ctx.moveTo(0, 444); ctx.lineTo(W, 444);
+        ctx.moveTo(0, 464); ctx.lineTo(W, 464);
+        ctx.stroke();
+
+        // Líneas diagonales en movimiento de la rejilla
+        const gridOffset = (game.rawDist * 36) % 40;
+        ctx.strokeStyle = biome.gridV;
+        ctx.beginPath();
+        for (let gx = -40; gx <= W + 40; gx += 40) {
+          const topX = gx - gridOffset;
+          const botX = 180 + (topX - 180) * 1.45;
+          ctx.moveTo(topX, 418);
+          ctx.lineTo(botX, H);
+        }
+        ctx.stroke();
+
+        // 7. Monedas de 5 formas con halo rápido y reflejo interior
+        for (let i = 0; i < game.coins.length; i++) {
+          const c = game.coins[i];
+          if (c.taken) continue;
+          const v = c.variant;
+          const scaleX = 0.72 + 0.28 * Math.abs(Math.cos(c.spin));
+          ctx.save();
+          ctx.translate(c.x, c.y);
+          ctx.scale(scaleX, 1);
+
+          // Halo ligero sin shadowBlur
+          ctx.fillStyle = v.glow;
+          ctx.globalAlpha = 0.22;
+          ctx.beginPath();
+          ctx.arc(0, 0, 14, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          ctx.fillStyle = v.fill;
+          ctx.strokeStyle = v.stroke;
+          ctx.lineWidth = 1.8;
+
+          if (v.shape === "circle") {
+            ctx.beginPath();
+            ctx.arc(0, 0, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = v.inner;
+            ctx.beginPath();
+            ctx.arc(-2.5, -2.5, 3.2, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (v.shape === "hex") {
+            ctx.beginPath();
+            for (let k = 0; k < 6; k++) {
+              const ang = (k * Math.PI) / 3;
+              const px = Math.cos(ang) * 10.5;
+              const py = Math.sin(ang) * 10.5;
+              if (k === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = v.inner;
+            ctx.beginPath();
+            ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (v.shape === "diamond") {
+            ctx.beginPath();
+            ctx.moveTo(0, -11.5);
+            ctx.lineTo(9.5, 0);
+            ctx.lineTo(0, 11.5);
+            ctx.lineTo(-9.5, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = v.inner;
+            ctx.beginPath();
+            ctx.moveTo(0, -5);
+            ctx.lineTo(4, 0);
+            ctx.lineTo(0, 5);
+            ctx.lineTo(-4, 0);
+            ctx.closePath();
+            ctx.fill();
+          } else if (v.shape === "star") {
+            ctx.beginPath();
+            for (let k = 0; k < 10; k++) {
+              const r = k % 2 === 0 ? 11.5 : 5.2;
+              const ang = (k * Math.PI) / 5 - Math.PI / 2;
+              const px = Math.cos(ang) * r;
+              const py = Math.sin(ang) * r;
+              if (k === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = v.inner;
+            ctx.beginPath();
+            ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = theme.skyLow;
+            ctx.beginPath();
+            ctx.arc(0, 0, 4.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+
+        // 8. Obstáculos de colores neón con borde superior brillante
+        for (let i = 0; i < game.obstacles.length; i++) {
+          const o = game.obstacles[i];
+          const topY = 416 - o.h;
+
+          if (o.spike) {
+            ctx.fillStyle = o.pal.main;
+            ctx.beginPath();
+            ctx.moveTo(o.x, 416);
+            ctx.lineTo(o.x + o.w / 2, topY);
+            ctx.lineTo(o.x + o.w, 416);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.strokeStyle = o.pal.top;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = o.pal.stripe;
+            ctx.beginPath();
+            ctx.moveTo(o.x + o.w * 0.34, 416);
+            ctx.lineTo(o.x + o.w / 2, topY + 10);
+            ctx.lineTo(o.x + o.w * 0.66, 416);
+            ctx.closePath();
+            ctx.fill();
+          } else {
+            ctx.fillStyle = o.pal.main;
+            ctx.fillRect(o.x, topY, o.w, o.h);
+            ctx.fillStyle = o.pal.top;
+            ctx.fillRect(o.x, topY, o.w, 4);
+            ctx.fillStyle = o.pal.stripe;
+            ctx.globalAlpha = 0.45;
+            ctx.fillRect(o.x + 4, topY + 10, o.w - 8, 4);
+            ctx.globalAlpha = 1;
+          }
+        }
+
+        // 9. Estela dinámica vinculada a la racha de esquivas
+        const isBlinkHidden = game.invuln > 0 && Math.floor(game.frame / 5) % 2 === 0;
+        if (game.trail.length > 0 && !isBlinkHidden && getActiveTrail().shape !== "none") {
+          const _tr = getActiveTrail();
+          const trailColor = _tr.color ? (_tr.shape === "rainbow" ? `hsl(${(game.frame * 4) % 360}, 100%, 60%)` : _tr.color) : (game.streak >= 10 ? skin.thruster : skin.body);
+          ctx.fillStyle = trailColor;
+          for (let i = game.trail.length - 1; i >= 0; i--) {
+            const tr = game.trail[i];
+            const ratio = 1 - i / (game.trail.length + 1);
+            const radius = (game.streak >= 15 ? 10.5 : 7.5) * ratio;
+            ctx.globalAlpha = ratio * (game.streak >= 10 ? 0.38 : 0.22);
+            ctx.beginPath();
+            ctx.arc(tr.x, tr.y, Math.max(2, radius), 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        // 10. Nave del jugador con su geometría distintiva
+        if (!isBlinkHidden) {
+          const px = 75;
+          const py = game.y + 17;
+          ctx.save();
+          ctx.translate(px, py);
+
+          // Aura neón ligera alrededor de la nave
+          ctx.fillStyle = skin.body;
+          ctx.globalAlpha = 0.16;
+          ctx.beginPath();
+          ctx.arc(0, 0, 22, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          const flameLen = 10 + Math.sin(game.frame * 0.7) * 4;
+          drawShipShape(ctx, skin, flameLen);
+          ctx.restore();
+        }
+
+        // 11. Ondas expansivas al recibir daño
+        for (let i = 0; i < game.shockwaves.length; i++) {
+          const sw = game.shockwaves[i];
+          ctx.globalAlpha = Math.max(0, sw.life / sw.maxLife) * 0.85;
+          ctx.strokeStyle = sw.c || PINK;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+
+        // 12. Partículas
+        for (let i = 0; i < game.parts.length; i++) {
+          const pt = game.parts[i];
+          ctx.globalAlpha = Math.max(0, pt.life / pt.maxLife);
+          ctx.fillStyle = pt.c;
+          ctx.fillRect(pt.x - 2.5, pt.y - 2.5, 5, 5);
+        }
+        ctx.globalAlpha = 1;
+
+        // 13. Banners flotantes dentro del canvas
+        if (game.bannerTimer > 0 && game.bannerText) {
+          const alpha = Math.min(1, game.bannerTimer / 18);
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = "rgba(8, 10, 24, 0.86)";
+          ctx.strokeStyle = game.bannerColor;
+          ctx.lineWidth = 1.6;
+          const bw = 240;
+          const bh = game.bannerSub ? 46 : 32;
+          const bx = (W - bw) / 2;
+          const by = 44;
+          ctx.beginPath();
+          ctx.roundRect(bx, by, bw, bh, 12);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = game.bannerColor;
+          ctx.font = "800 13px 'Orbitron', system-ui, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(game.bannerText, W / 2, by + 20);
+
+          if (game.bannerSub) {
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "600 11px 'Inter', system-ui, sans-serif";
+            ctx.fillText(game.bannerSub, W / 2, by + 36);
+          }
+          ctx.restore();
+        }
+
+        // Flash rojo suave al recibir impacto
+        if (game.hitFlash > 0) {
+          ctx.fillStyle = `rgba(255,30,86,${(game.hitFlash / 32).toFixed(2)})`;
+          ctx.fillRect(0, 0, W, H);
+        }
+
+        ctx.restore();
+      }
+
+      function updateGameHudDOM() {
+        if (!game) return;
+        const theme = getActiveTheme();
+        const labelEl = document.getElementById("hud-dist-label");
+        const scoreEl = document.getElementById("hud-score-val");
+        const statsEl = document.getElementById("hud-streak-line");
+        const heartsEl = document.getElementById("hud-hearts-row");
+        const coinsEl = document.getElementById("hud-coins-val");
+        const fpsEl = document.getElementById("hud-fps-val");
+        const missionsEl = document.getElementById("hud-missions-grid");
+
+        if (labelEl) {
+          labelEl.textContent = game.liveRecordBeat ? "★ RÉCORD EN VIVO · 1m = 1pt" : "DISTANCIA / SCORE (1m = 1pt)";
+          labelEl.style.color = game.liveRecordBeat ? GOLD : "rgba(255,255,255,0.6)";
+        }
+        if (scoreEl) {
+          scoreEl.innerHTML = `${game.meters.toLocaleString()} <span style="font-size:12px;color:#fff;">pts</span>`;
+          scoreEl.style.color = game.liveRecordBeat ? GOLD : theme.accent;
+        }
+        if (statsEl) {
+          const mult = computeVisualMultiplier(game.streak).toFixed(2);
+          const kmh = Math.round(36 * game.speedMult);
+          const magnetTxt = game.streak >= 15 ? " · 🧲" : "";
+          statsEl.textContent = `🔥 ${game.streak} · x${mult} · ${kmh} km/h${magnetTxt}`;
+        }
+        if (heartsEl) {
+          heartsEl.innerHTML = [1, 2, 3].map((idx) =>
+            `<span style="color:${idx <= game.hearts ? "#f87171" : "rgba(255,255,255,0.18)"};display:inline-flex;">${idx <= game.hearts ? ICONS.heartFull : ICONS.heartEmpty}</span>`
+          ).join("");
+        }
+        if (coinsEl) {
+          coinsEl.textContent = `🪙 +${game.coinCount}`;
+        }
+        if (fpsEl) {
+          fpsEl.textContent = `${currentFps} FPS`;
+        }
+        if (missionsEl) {
+          missionsEl.innerHTML = renderMissionsHtml();
+        }
+      }
+
+      function renderMissionsHtml() {
+        return appData.missions.map((m) => {
+          const cur = Math.min(m.target, m.current);
+          return `
+            <div style="padding:5px 7px;border-radius:11px;background:${m.claimed ? "rgba(110,231,183,0.14)" : "rgba(255,255,255,0.06)"};border:1px solid ${m.claimed ? "rgba(110,231,183,0.45)" : "rgba(255,255,255,0.1)"};font-size:10px;line-height:1.25;">
+              <div style="font-weight:700;color:${m.claimed ? "#6ee7b7" : "#fff"};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.title}</div>
+              <div style="margin-top:2px;font-weight:700;color:${m.claimed ? "#6ee7b7" : GOLD};">${m.claimed ? `✓ +${m.reward} 🪙` : `${cur}/${m.target} · +${m.reward}🪙`}</div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // =========================================================================
+      // 10. RENDERIZADO DE PANTALLAS Y MODALES
+      // =========================================================================
+      function renderApp() {
+        const root = document.getElementById("app");
+        if (!root) return;
+
+        const theme = getActiveTheme();
+        const skin = getActiveSkin();
+
+        root.style.setProperty("--bg", theme.appBg);
+        root.style.setProperty("--surface", theme.surface);
+        root.style.setProperty("--surface-2", theme.surface2);
+        root.style.setProperty("--line", theme.line);
+        root.style.setProperty("--accent", theme.accent);
+        root.style.setProperty("--secondary", theme.secondary);
+
+        const aliasText = appData.settings.playerName ? appData.settings.playerName : "Sin alias";
+
+        let mainHtml = "";
+
+        // -----------------------------------------------------------------------
+        // PANTALLA 1: MENÚ PRINCIPAL
+        // -----------------------------------------------------------------------
+        if (uiState.screen === "menu") {
+          mainHtml = `
+            <div style="display:flex;flex-direction:column;gap:11px;">
+              <div style="border-radius:24px;padding:16px;text-align:center;background:${theme.heroGrad};border:1px solid ${theme.accent}55;">
+                <div class="anim-floaty" style="width:68px;height:68px;margin:0 auto;border-radius:20px;background:rgba(0,0,0,0.45);border:1px solid ${skin.body}66;display:grid;place-items:center;box-shadow:0 12px 26px ${skin.glow};">
+                  ${getSkinPreviewSvg(skin)}
+                </div>
+                <h1 class="font-display" style="font-size:27px;line-height:1.05;margin:10px 0 0;">NEON DASH</h1>
+                <p class="font-display" style="font-size:11.5px;letter-spacing:0.18em;color:${theme.secondary};margin:4px 0 0;">MODO INFINITO · 3 VIDAS</p>
+                <p style="font-size:12.5px;color:rgba(255,255,255,0.8);margin:8px 0 0;line-height:1.4;">
+                  Cada <strong style="color:#fff;">1 metro = 1 punto</strong>. Todas tus partidas suman para el Torneo $1000. Las monedas sirven para la <strong style="color:${GOLD};">Tienda</strong>.
+                </p>
+                <div style="display:flex;justify-content:center;gap:6px;margin-top:10px;flex-wrap:wrap;font-size:11px;">
+                  <span style="padding:4px 9px;border-radius:999px;background:rgba(0,0,0,0.38);">♥♥♥ 3 vidas</span>
+                  <span style="padding:4px 9px;border-radius:999px;background:rgba(0,0,0,0.38);color:${theme.accent};">📏 1m = 1pt</span>
+                  <span style="padding:4px 9px;border-radius:999px;background:rgba(0,0,0,0.38);color:${GOLD};">🚀 ${skin.name}</span>
+                </div>
+              </div>
+
+              <button id="btn-play-main" class="btn-primary font-display" style="padding:16px;font-size:16px;background:linear-gradient(90deg, ${theme.accent}, ${theme.secondary});">
+                ${ICONS.play}
+                <span>JUGAR · MODO INFINITO</span>
+              </button>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+                <button id="btn-open-tournament" class="btn-outline">
+                  ${ICONS.trophy}
+                  <span>TORNEO $1000</span>
+                </button>
+                <button id="btn-open-shop" class="btn-outline" style="border-color:${GOLD}55;color:${GOLD};">
+                  ${ICONS.shop}
+                  <span>TIENDA</span>
+                </button>
+              </div>
+
+              <div class="card" style="padding:12px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
+                <div>
+                  <div style="font-size:10.5px;color:var(--muted);">Score Total</div>
+                  <div class="font-display" style="font-size:16px;color:${theme.accent};margin-top:2px;">${appData.stats.totalScore.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div style="font-size:10.5px;color:var(--muted);">Mejor Marca</div>
+                  <div class="font-display" style="font-size:16px;color:${GOLD};margin-top:2px;">${appData.stats.bestRunDistance.toLocaleString()}m</div>
+                </div>
+                <div>
+                  <div style="font-size:10.5px;color:var(--muted);">Partidas</div>
+                  <div class="font-display" style="font-size:16px;color:#fff;margin-top:2px;">${appData.stats.gamesPlayed}</div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+                <button id="btn-open-settings" class="btn-outline">
+                  ${ICONS.settings}
+                  <span>CONFIGURACIÓN</span>
+                </button>
+                <button id="btn-open-exit" class="btn-outline" style="border-color:rgba(248,113,113,0.4);color:#fca5a5;">
+                  ${ICONS.exit}
+                  <span>SALIR</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
+        // -----------------------------------------------------------------------
+        // PANTALLA 2: TIENDA (8 SKINS CON FORMAS ÚNICAS + 3 TEMAS)
+        // -----------------------------------------------------------------------
+        else if (uiState.screen === "shop") {
+          const skinsListHtml = NEON_SKINS.map((sk) => {
+            const unlocked = appData.settings.unlockedSkins.includes(sk.id);
+            const equipped = appData.settings.equippedSkin === sk.id;
+            const canBuy = appData.coinsBalance >= sk.price;
+            const btnText = equipped ? "Equipada" : (unlocked ? "Equipar" : `Comprar (${sk.price})`);
+            const btnBg = equipped ? "rgba(255,255,255,0.16)" : (unlocked ? theme.accent : (canBuy ? GOLD : "rgba(255,255,255,0.08)"));
+            const btnColor = equipped ? "#ffffff" : "#070c14";
+
+            return `
+              <div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:${equipped ? sk.body : "var(--line)"};">
+                <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                  <div style="width:56px;height:44px;border-radius:13px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.12);display:grid;place-items:center;flex-shrink:0;">
+                    ${getSkinPreviewSvg(sk)}
+                  </div>
+                  <div style="min-width:0;">
+                    <div class="font-display" style="font-size:13.5px;color:#fff;">${sk.name}</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:2px;">${sk.subtitle}</div>
+                    <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">
+                      ${sk.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueada" : `${sk.price} monedas`)}
+                    </div>
+                  </div>
+                </div>
+                <button data-skin-id="${sk.id}" ${!unlocked && !canBuy ? "disabled" : ""} style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;flex-shrink:0;background:${btnBg};color:${btnColor};">
+                  ${btnText}
+                </button>
+              </div>
+            `;
+          }).join("");
+
+          const themesListHtml = INTERFACE_THEMES.map((th) => {
+            const unlocked = appData.settings.unlockedThemes.includes(th.id);
+            const applied = appData.settings.equippedTheme === th.id;
+            const canBuy = appData.coinsBalance >= th.price;
+            const btnText = applied ? "Aplicado" : (unlocked ? "Aplicar" : `Comprar (${th.price})`);
+            const btnBg = applied ? "rgba(110,231,183,0.22)" : (unlocked ? th.accent : (canBuy ? GOLD : "rgba(255,255,255,0.08)"));
+            const btnColor = applied ? "#6ee7b7" : "#070c14";
+
+            return `
+              <div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:${applied ? th.accent : "var(--line)"};">
+                <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                  <div style="width:56px;height:44px;border-radius:13px;background:linear-gradient(160deg, ${th.skyTop}, ${th.skyHorizon});border:1px solid ${th.accent}77;display:grid;place-items:center;flex-shrink:0;position:relative;overflow:hidden;">
+                    <span style="width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg, ${th.moonTop}, ${th.moonBot});box-shadow:0 0 10px ${th.moonGlow};display:block;"></span>
+                    <span style="position:absolute;bottom:0;left:0;right:0;height:6px;background:${th.horizonLine};opacity:0.75;"></span>
+                  </div>
+                  <div style="min-width:0;">
+                    <div class="font-display" style="font-size:13.5px;color:#fff;">${th.name}</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:2px;">${th.subtitle}</div>
+                    <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">
+                      ${th.price === 0 ? "Gratis · Tema inicial" : (unlocked ? "Desbloqueado" : `${th.price} monedas`)}
+                    </div>
+                  </div>
+                </div>
+                <button data-theme-id="${th.id}" ${applied || (!unlocked && !canBuy) ? "disabled" : ""} style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;flex-shrink:0;background:${btnBg};color:${btnColor};border:${applied ? "1px solid rgba(110,231,183,0.45)" : "none"};">
+                  ${btnText}
+                </button>
+              </div>
+            `;
+          }).join("");
+
+          const randomBarHtml = (cat, key, label) => `
+            <div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px dashed ${theme.accent}88;background:rgba(0,240,255,0.06);">
+              <div><div class="font-display" style="font-size:13px;">🎲 ALEATORIO</div>
+              <div style="font-size:11px;color:var(--muted);">Solo entre lo que ya compraste · Sin repetir el actual</div>
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;margin-top:6px;color:var(--muted);"><input type="checkbox" id="random-${cat}" ${appData.settings[key] ? "checked" : ""} style="accent-color:${theme.accent};"> Cambiar solo en cada partida</label></div>
+              <button id="btn-random-${cat}" style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;background:${theme.accent};color:#070c14;flex-shrink:0;">¡Sorpréndeme!</button>
+            </div>`;
+
+          const musicListHtml = MUSIC_TRACKS.map((tr) => {
+            const unlocked = appData.settings.unlockedMusic.includes(tr.id);
+            const equipped = appData.settings.equippedMusic === tr.id;
+            const canBuy = appData.coinsBalance >= tr.price;
+            const btnText = equipped ? "Sonando" : (unlocked ? "Usar" : `Comprar (${tr.price})`);
+            return `<div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:${equipped ? theme.accent : "var(--line)"};">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0;"><div style="width:56px;height:44px;border-radius:13px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.12);display:grid;place-items:center;font-size:20px;flex-shrink:0;">🎵</div>
+              <div style="min-width:0;"><div class="font-display" style="font-size:13.5px;">${tr.name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">${tr.subtitle}</div>
+              <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">${tr.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueado" : tr.price + " monedas")}</div></div></div>
+              <button data-music-id="${tr.id}" ${equipped || (!unlocked && !canBuy) ? "disabled" : ""} style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;flex-shrink:0;background:${equipped ? "rgba(255,255,255,0.16)" : (unlocked ? theme.accent : (canBuy ? GOLD : "rgba(255,255,255,0.08)"))};color:${equipped ? "#fff" : "#070c14"};">${btnText}</button></div>`;
+          }).join("");
+
+          const trailsListHtml = SHIP_TRAILS.map((tr) => {
+            const unlocked = appData.settings.unlockedTrails.includes(tr.id);
+            const equipped = appData.settings.equippedTrail === tr.id;
+            const canBuy = appData.coinsBalance >= tr.price;
+            const btnText = equipped ? "Activa" : (unlocked ? "Usar" : `Comprar (${tr.price})`);
+            const dot = tr.color ? `<span style="width:22px;height:22px;border-radius:50%;background:${tr.color};box-shadow:0 0 10px ${tr.color};display:block;"></span>` : `<span style="font-size:20px;">🚫</span>`;
+            return `<div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:${equipped ? (tr.color || theme.accent) : "var(--line)"};">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0;"><div style="width:56px;height:44px;border-radius:13px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.12);display:grid;place-items:center;flex-shrink:0;">${dot}</div>
+              <div style="min-width:0;"><div class="font-display" style="font-size:13.5px;">${tr.name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">${tr.subtitle}</div>
+              <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">${tr.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueado" : tr.price + " monedas")}</div></div></div>
+              <button data-trail-id="${tr.id}" ${equipped || (!unlocked && !canBuy) ? "disabled" : ""} style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;flex-shrink:0;background:${equipped ? "rgba(255,255,255,0.16)" : (unlocked ? theme.accent : (canBuy ? GOLD : "rgba(255,255,255,0.08)"))};color:${equipped ? "#fff" : "#070c14"};">${btnText}</button></div>`;
+          }).join("");
+
+          const shopContentHtml = uiState.shopTab === "skins" ? skinsListHtml + randomBarHtml("skins", "randomSkin")
+            : uiState.shopTab === "themes" ? themesListHtml + randomBarHtml("themes", "randomTheme")
+            : uiState.shopTab === "music" ? musicListHtml + randomBarHtml("music", "randomMusic")
+            : trailsListHtml + randomBarHtml("trails", "randomTrail");
+
+          mainHtml = `
+            <div style="display:flex;flex-direction:column;gap:11px;padding-bottom:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <button id="btn-back-menu" class="pill-btn">
+                  ${ICONS.back}
+                  <span>REGRESAR</span>
+                </button>
+                <div style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(255,225,77,0.16);border:1px solid rgba(255,225,77,0.45);color:${GOLD};font-size:12px;font-weight:800;">
+                  ${ICONS.coin}
+                  <span>${appData.coinsBalance.toLocaleString()} monedas</span>
+                </div>
+              </div>
+
+              <div class="card" style="padding:13px 14px;background:${theme.heroGrad};">
+                <div class="font-display" style="font-size:17px;color:${GOLD};">TIENDA NEÓN</div>
+                <p style="font-size:12px;color:rgba(255,255,255,0.8);margin:4px 0 0;line-height:1.4;">
+                  Cada nave tiene su propia silueta aerodinámica y los temas transforman cielo, luna y atmósfera sin alterar puntos de torneo.
+                </p>
+              </div>
+
+              <div class="tab-bar">
+                <button id="tab-shop-skins" class="tab-btn ${uiState.shopTab === "skins" ? "active" : ""}">NAVES (12)</button>
+                <button id="tab-shop-themes" class="tab-btn ${uiState.shopTab === "themes" ? "active" : ""}">TEMAS (6)</button>
+                <button id="tab-shop-music" class="tab-btn ${uiState.shopTab === "music" ? "active" : ""}">MÚSICA (6)</button>
+                <button id="tab-shop-trails" class="tab-btn ${uiState.shopTab === "trails" ? "active" : ""}">ESTELAS (5)</button>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:9px;">${shopContentHtml}</div>
+
+              <button id="btn-back-menu-bottom" class="btn-outline">
+                ${ICONS.back}
+                <span>REGRESAR AL MENÚ</span>
+              </button>
+            </div>
+          `;
+        }
+
+        // -----------------------------------------------------------------------
+        // PANTALLA 3: TORNEO $1000 MXN
+        // -----------------------------------------------------------------------
+        else if (uiState.screen === "tournament") {
+          const ranking = getSortedLeaderboard().slice(0, 10);
+          const rowsHtml = ranking.map((pl, idx) => {
+            const isMe = pl.id === "local_player";
+            const medal = idx === 0 ? "🥇" : (idx === 1 ? "🥈" : (idx === 2 ? "🥉" : `#${idx + 1}`));
+            return `
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:13px;background:${isMe ? "rgba(0,240,255,0.14)" : "rgba(255,255,255,0.04)"};border:1px solid ${isMe ? theme.accent : "rgba(255,255,255,0.08)"};">
+                <div style="display:flex;align-items:center;gap:9px;min-width:0;">
+                  <span class="font-display" style="font-size:13px;width:28px;color:${idx < 3 ? GOLD : "#fff"};">${medal}</span>
+                  <div style="min-width:0;">
+                    <div style="font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${pl.name} ${isMe ? "(Tú)" : ""}</div>
+                    <div style="font-size:10.5px;color:var(--muted);">Mejor marca: ${pl.bestRun}m · ${pl.games} partidas</div>
+                  </div>
+                </div>
+                <div class="font-display" style="font-size:14px;color:${theme.accent};font-weight:800;">${pl.totalScore.toLocaleString()} pts</div>
+              </div>
+            `;
+          }).join("");
+
+          mainHtml = `
+            <div style="display:flex;flex-direction:column;gap:11px;padding-bottom:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <button id="btn-back-menu" class="pill-btn">
+                  ${ICONS.back}
+                  <span>REGRESAR</span>
+                </button>
+                <span style="font-size:11px;font-weight:700;color:${GOLD};">TEMPORADA OFICIAL</span>
+              </div>
+
+              <div class="card" style="padding:14px;background:${theme.heroGrad};border-color:${GOLD}55;">
+                <div class="font-display" style="font-size:18px;color:${GOLD};">TORNEO OFICIAL $1,400 MXN</div>
+                <p style="font-size:12px;color:rgba(255,255,255,0.82);margin:4px 0 10px;">
+                  Acumula metros jugando en Modo Infinito. Cada metro recorrido equivale exactamente a 1 punto oficial.
+                </p>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;text-align:center;">
+                  <div style="padding:9px 6px;border-radius:14px;background:rgba(0,0,0,0.42);border:1px solid ${GOLD}66;">
+                    <div style="font-size:11px;color:${GOLD};font-weight:700;">1° LUGAR</div>
+                    <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">$1,000</div>
+                    <div style="font-size:10px;color:var(--muted);">MXN</div>
+                  </div>
+                  <div style="padding:9px 6px;border-radius:14px;background:rgba(0,0,0,0.42);border:1px solid rgba(255,255,255,0.2);">
+                    <div style="font-size:11px;color:#e2e8f0;font-weight:700;">2° LUGAR</div>
+                    <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">$300</div>
+                    <div style="font-size:10px;color:var(--muted);">MXN</div>
+                  </div>
+                  <div style="padding:9px 6px;border-radius:14px;background:rgba(0,0,0,0.42);border:1px solid rgba(251,146,60,0.35);">
+                    <div style="font-size:11px;color:#fdba74;font-weight:700;">3° LUGAR</div>
+                    <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">$100</div>
+                    <div style="font-size:10px;color:var(--muted);">MXN</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" style="padding:12px 14px;">
+                <div class="font-display" style="font-size:13px;color:${theme.accent};margin-bottom:6px;">REGLAS Y JUEGO LIMPIO</div>
+                <ul style="margin:0;padding-left:18px;font-size:12px;color:rgba(255,255,255,0.8);line-height:1.5;">
+                  <li><strong>1 metro = 1 punto</strong> sin bonificadores externos.</li>
+                  <li>Todas tus partidas suman a tu Score Total acumulado.</li>
+                  <li>Las monedas, naves y temas son estrictamente cosméticos.</li>
+                  <li>Cualquier alteración de velocidad o memoria descalifica el registro.</li>
+                </ul>
+              </div>
+
+              <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:7px;">
+                <div class="font-display" style="font-size:13px;color:${GOLD};margin-bottom:2px;">TOP 10 CLASIFICACIÓN LOCAL</div>
+                ${rowsHtml}
+              </div>
+
+              <button id="btn-back-menu-bottom" class="btn-outline">
+                ${ICONS.back}
+                <span>REGRESAR AL MENÚ</span>
+              </button>
+            </div>
+          `;
+        }
+
+        // -----------------------------------------------------------------------
+        // PANTALLA 4: CONFIGURACIÓN LIMPIA
+        // -----------------------------------------------------------------------
+        else if (uiState.screen === "settings") {
+          mainHtml = `
+            <div style="display:flex;flex-direction:column;gap:11px;padding-bottom:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <button id="btn-back-menu" class="pill-btn">
+                  ${ICONS.back}
+                  <span>REGRESAR</span>
+                </button>
+                <span class="font-display" style="font-size:12px;color:${theme.accent};">CONFIGURACIÓN</span>
+              </div>
+
+              <div class="card" style="padding:14px;display:flex;flex-direction:column;gap:14px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div>
+                    <div style="font-size:13.5px;font-weight:700;">Música Synthwave</div>
+                    <div style="font-size:11px;color:var(--muted);">Bajo electrónico procedural en partida</div>
+                  </div>
+                  <button id="toggle-music" class="switch-btn ${appData.settings.music ? "on" : ""}" aria-label="Música">
+                    <span class="switch-knob"></span>
+                  </button>
+                </div>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div>
+                    <div style="font-size:13.5px;font-weight:700;">Efectos de Sonido (SFX)</div>
+                    <div style="font-size:11px;color:var(--muted);">Saltos, caída rápida, monedas e impactos</div>
+                  </div>
+                  <button id="toggle-sfx" class="switch-btn ${appData.settings.sfx ? "on" : ""}" aria-label="Efectos">
+                    <span class="switch-knob"></span>
+                  </button>
+                </div>
+
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px;">
+                    <span>Volumen General</span>
+                    <span style="color:${theme.accent};">${appData.settings.volume}%</span>
+                  </div>
+                  <input id="range-volume" type="range" min="0" max="100" value="${appData.settings.volume}">
+                </div>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div>
+                    <div style="font-size:13.5px;font-weight:700;">Vibración Háptica</div>
+                    <div style="font-size:11px;color:var(--muted);">Respuesta táctil al saltar o chocar</div>
+                  </div>
+                  <button id="toggle-vibrate" class="switch-btn ${appData.settings.vibration ? "on" : ""}" aria-label="Vibración">
+                    <span class="switch-knob"></span>
+                  </button>
+                </div>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div>
+                    <div style="font-size:13.5px;font-weight:700;">Contador FPS en Partida</div>
+                    <div style="font-size:11px;color:var(--muted);">Muestra cuadros por segundo en el HUD</div>
+                  </div>
+                  <button id="toggle-fps" class="switch-btn ${appData.settings.showFps ? "on" : ""}" aria-label="FPS">
+                    <span class="switch-knob"></span>
+                  </button>
+                </div>
+              </div>
+
+              <button id="btn-back-menu-bottom" class="btn-outline">
+                ${ICONS.back}
+                <span>REGRESAR AL MENÚ</span>
+              </button>
+            </div>
+          `;
+        }
+
+        // -----------------------------------------------------------------------
+        // PANTALLA 5: JUEGO ACTIVO (100% TOUCH EN CANVAS: TOCAR SALTA, DOBLE TOQUE BAJA)
+        // -----------------------------------------------------------------------
+        else if (uiState.screen === "game" && game) {
+          const mult = computeVisualMultiplier(game.streak).toFixed(2);
+          const kmh = Math.round(36 * game.speedMult);
+          const heartsHtml = [1, 2, 3].map((idx) =>
+            `<span style="color:${idx <= game.hearts ? "#f87171" : "rgba(255,255,255,0.18)"};display:inline-flex;">${idx <= game.hearts ? ICONS.heartFull : ICONS.heartEmpty}</span>`
+          ).join("");
+
+          let overlayHtml = "";
+          if (uiState.resumeCountdown > 0 && !uiState.paused && !uiState.gameOver) {
+            overlayHtml = `
+              <div class="overlay-layer" style="background:rgba(5,6,18,0.55);align-items:center;pointer-events:none;">
+                <div class="font-display" style="width:84px;height:84px;border-radius:50%;background:rgba(17,20,40,0.94);border:2px solid ${theme.accent};color:${GOLD};display:grid;place-items:center;font-size:42px;box-shadow:0 0 26px ${theme.accent}66;">
+                  ${uiState.resumeCountdown}
+                </div>
+              </div>
+            `;
+          } else if (uiState.paused && !uiState.gameOver) {
+            overlayHtml = `
+              <div class="overlay-layer">
+                <div class="card" style="padding:18px;text-align:center;">
+                  <div class="font-display" style="font-size:23px;color:#fff;">PAUSA</div>
+                  <p style="font-size:12.5px;color:var(--muted);margin:6px 0 16px;">Al continuar tendrás una cuenta regresiva 3-2-1.</p>
+                  <div style="display:flex;flex-direction:column;gap:9px;">
+                    <button id="btn-resume-game" class="btn-primary">
+                      ${ICONS.play}
+                      <span>CONTINUAR (3 - 2 - 1)</span>
+                    </button>
+                    <button id="btn-restart-pause" class="btn-outline" style="border-color:${theme.secondary}66;color:${theme.secondary};">
+                      ${ICONS.restart}
+                      <span>REINICIAR PARTIDA</span>
+                    </button>
+                    <button id="btn-quit-menu" class="btn-outline">
+                      ${ICONS.back}
+                      <span>SALIR AL MENÚ</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else if (uiState.gameOver && uiState.lastRunSummary) {
+            const sum = uiState.lastRunSummary;
+            overlayHtml = `
+              <div class="overlay-layer">
+                <div class="card" style="padding:16px;text-align:center;border-color:${uiState.isNewRecordRun ? GOLD : theme.accent};">
+                  <div class="font-display" style="font-size:12px;color:${uiState.isNewRecordRun ? GOLD : theme.secondary};letter-spacing:0.12em;">
+                    ${uiState.isNewRecordRun ? "★ NUEVO RÉCORD PERSONAL ★" : "FIN DE PARTIDA"}
+                  </div>
+                  <div class="font-display" style="font-size:32px;color:${theme.accent};margin:4px 0;">
+                    ${sum.distance.toLocaleString()} <span style="font-size:14px;color:#fff;">pts</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px;text-align:center;">
+                    <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.38);">
+                      <div style="font-size:10.5px;color:var(--muted);">Monedas Ganadas</div>
+                      <div class="font-display" style="font-size:15px;color:${GOLD};margin-top:2px;">🪙 +${sum.coins}</div>
+                    </div>
+                    <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.38);">
+                      <div style="font-size:10.5px;color:var(--muted);">Score Acumulado</div>
+                      <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">${sum.totalAccumulated.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    <button id="btn-play-again" class="btn-primary" style="background:linear-gradient(90deg, ${theme.accent}, ${theme.secondary});">
+                      ${ICONS.restart}
+                      <span>VOLVER A JUGAR</span>
+                    </button>
+                    <button id="btn-go-shop-over" class="btn-outline" style="border-color:${GOLD}55;color:${GOLD};">
+                      ${ICONS.shop}
+                      <span>IR A TIENDA (${appData.coinsBalance} 🪙)</span>
+                    </button>
+                    <button id="btn-quit-menu" class="btn-outline">
+                      ${ICONS.back}
+                      <span>MENÚ PRINCIPAL</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          mainHtml = `
+            <div style="display:flex;flex-direction:column;height:100%;gap:7px;">
+              <div class="card" style="padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0;">
+                <div style="min-width:0;">
+                  <div id="hud-dist-label" style="font-size:10px;font-weight:700;letter-spacing:0.06em;color:${game.liveRecordBeat ? GOLD : "rgba(255,255,255,0.6)"};">
+                    ${game.liveRecordBeat ? "★ RÉCORD EN VIVO · 1m = 1pt" : "DISTANCIA / SCORE (1m = 1pt)"}
+                  </div>
+                  <div id="hud-score-val" class="font-display" style="font-size:22px;line-height:1.05;color:${game.liveRecordBeat ? GOLD : theme.accent};margin-top:1px;">
+                    ${game.meters.toLocaleString()} <span style="font-size:12px;color:#fff;">pts</span>
+                  </div>
+                  <div id="hud-streak-line" style="font-size:11px;color:rgba(255,255,255,0.78);margin-top:2px;">
+                    🔥 ${game.streak} · x${mult} · ${kmh} km/h${game.streak >= 15 ? " · 🧲" : ""}
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                  <div style="text-align:right;">
+                    <div id="hud-hearts-row" style="display:flex;gap:2px;justify-content:flex-end;">${heartsHtml}</div>
+                    <div id="hud-coins-val" style="font-size:11px;font-weight:800;color:${GOLD};margin-top:2px;">🪙 +${game.coinCount}</div>
+                    ${appData.settings.showFps ? `<div id="hud-fps-val" style="font-size:10px;font-weight:700;color:${theme.accent};margin-top:1px;">${currentFps} FPS</div>` : ""}
+                  </div>
+                  <button id="btn-pause-game" aria-label="Pausar" style="width:38px;height:38px;border-radius:50%;background:${theme.accent};color:#070c14;display:grid;place-items:center;">
+                    ${ICONS.pause}
+                  </button>
+                </div>
+              </div>
+
+              <div id="hud-missions-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex-shrink:0;">
+                ${renderMissionsHtml()}
+              </div>
+
+              <div class="canvas-wrap" style="border-color:${game.liveRecordBeat ? GOLD + "77" : "var(--line)"};">
+                <canvas id="gameCanvas" width="360" height="480"></canvas>
+                <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;pointer-events:none;font-size:10px;font-weight:700;letter-spacing:0.06em;color:rgba(255,255,255,0.5);">
+                  TOCA PANTALLA: SALTAR · DOBLE TOQUE: BAJAR
+                </div>
+                ${overlayHtml}
+              </div>
+            </div>
+          `;
+        }
+
+        // -----------------------------------------------------------------------
+        // MODALES GLOBALES (ALIAS DE JUGADOR Y SALIDA REAL ANDROID)
+        // -----------------------------------------------------------------------
+        let globalModalHtml = "";
+        if (uiState.aliasModalOpen) {
+          globalModalHtml = `
+            <div class="modal-global">
+              <div class="card" style="width:100%;max-width:360px;padding:18px;">
+                <div class="font-display" style="font-size:17px;color:${theme.accent};">ALIAS DE COMPETIDOR</div>
+                <p style="font-size:12px;color:var(--muted);margin:6px 0 12px;line-height:1.4;">
+                  Tu alias aparecerá en la tabla del Torneo $1000 y guardará tu puntuación acumulada offline.
+                </p>
+                <input id="input-player-alias" type="text" maxlength="18" placeholder="Ej. NeonRider_MX" value="${(appData.settings.playerName || "").replace(/"/g, "&quot;")}">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
+                  <button id="btn-cancel-alias" class="btn-outline">Cancelar</button>
+                  <button id="btn-save-alias" class="btn-primary">Guardar</button>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (uiState.exitModalOpen) {
+          globalModalHtml = `
+            <div class="modal-global">
+              <div class="card" style="width:100%;max-width:350px;padding:18px;text-align:center;">
+                <div class="font-display" style="font-size:17px;color:#fca5a5;">¿SALIR DE NEON DASH?</div>
+                <p style="font-size:12.5px;color:var(--muted);margin:8px 0 16px;">Tu progreso, monedas y desbloqueos ya están guardados localmente.</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  <button id="btn-cancel-exit" class="btn-outline">Cancelar</button>
+                  <button id="btn-confirm-exit" class="btn-primary" style="background:#f87171;color:#070c14;">Salir</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        const toastHtml = uiState.toastMsg ? `<div class="toast-banner">${uiState.toastMsg}</div>` : "";
+
+        root.innerHTML = `
+          <header class="app-header">
+            <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+              <div class="font-display" style="width:32px;height:32px;border-radius:10px;background:${skin.body};color:#070c14;display:grid;place-items:center;font-size:16px;font-weight:900;flex-shrink:0;">◆</div>
+              <div style="min-width:0;">
+                <div class="font-display" style="font-size:13.5px;line-height:1.1;color:#fff;">NEON DASH</div>
+                <div style="font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${theme.name}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              <div style="display:inline-flex;align-items:center;gap:4px;padding:5px 9px;border-radius:999px;background:rgba(255,225,77,0.14);border:1px solid rgba(255,225,77,0.38);color:${GOLD};font-size:11.5px;font-weight:800;">
+                ${ICONS.coin}
+                <span>${appData.coinsBalance.toLocaleString()}</span>
+              </div>
+              <button id="btn-header-alias" class="pill-btn" style="max-width:120px;">
+                ${ICONS.user}
+                <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${aliasText}</span>
+              </button>
+            </div>
+          </header>
+
+          <main class="app-main ${uiState.screen === "game" ? "game-mode" : ""}">
+            ${mainHtml}
+          </main>
+
+          ${toastHtml}
+          ${globalModalHtml}
+        `;
+
+        bindEvents();
+
+        if (uiState.screen === "game" && game) {
+          renderGameCanvas(theme, skin);
+        }
+      }
+
+      // =========================================================================
+      // 11. VINCULACIÓN SEGURA DE EVENTOS
+      // =========================================================================
+      function bindEvents() {
+        const byId = (id) => document.getElementById(id);
+
+        const btnAlias = byId("btn-header-alias");
+        if (btnAlias) {
+          btnAlias.onclick = () => {
+            uiState.aliasModalOpen = true;
+            uiState.pendingPlayAfterAlias = false;
+            renderApp();
+          };
+        }
+
+        const btnPlay = byId("btn-play-main");
+        if (btnPlay) {
+          btnPlay.onclick = () => {
+            if (!appData.settings.playerName || !appData.settings.playerName.trim()) {
+              uiState.aliasModalOpen = true;
+              uiState.pendingPlayAfterAlias = true;
+              renderApp();
+              return;
+            }
+            initGameSession();
+          };
+        }
+
+        const btnTourney = byId("btn-open-tournament");
+        if (btnTourney) btnTourney.onclick = () => { uiState.screen = "tournament"; renderApp(); };
+
+        const btnShop = byId("btn-open-shop");
+        if (btnShop) btnShop.onclick = () => { uiState.screen = "shop"; renderApp(); };
+
+        const btnSettings = byId("btn-open-settings");
+        if (btnSettings) btnSettings.onclick = () => { uiState.screen = "settings"; renderApp(); };
+
+        const btnExit = byId("btn-open-exit");
+        if (btnExit) btnExit.onclick = () => { uiState.exitModalOpen = true; renderApp(); };
+
+        ["btn-back-menu", "btn-back-menu-bottom"].forEach((id) => {
+          const el = byId(id);
+          if (el) el.onclick = () => { uiState.screen = "menu"; renderApp(); };
+        });
+
+        const tabSkins = byId("tab-shop-skins");
+        if (tabSkins) tabSkins.onclick = () => { uiState.shopTab = "skins"; renderApp(); };
+
+        const tabMusic = byId("tab-shop-music");
+        if (tabMusic) tabMusic.onclick = () => { uiState.shopTab = "music"; renderApp(); };
+        const tabTrails = byId("tab-shop-trails");
+        if (tabTrails) tabTrails.onclick = () => { uiState.shopTab = "trails"; renderApp(); };
+        ["skins","themes","music","trails"].forEach((cat) => {
+          const btnR = byId("btn-random-" + cat); if (btnR) btnR.onclick = () => applyRandomCategory(cat);
+          const chk = byId("random-" + cat); if (chk) chk.onchange = () => { const k = {skins:"randomSkin",themes:"randomTheme",music:"randomMusic",trails:"randomTrail"}[cat]; appData.settings[k] = chk.checked; persistData(); showToast(chk.checked ? "Aleatorio en cada partida: ON" : "Aleatorio en cada partida: OFF"); };
+        });
+        const buyGeneric = (list, unlockedKey, equippedKey, id, name, onEquip) => {
+          const item = list.find((x) => x.id === id); if (!item) return;
+          const unlocked = appData.settings[unlockedKey].includes(id);
+          if (appData.settings[equippedKey] === id) return;
+          if (unlocked) { appData.settings[equippedKey] = id; persistData(); if (onEquip) onEquip(); showToast(`"${name}" aplicado.`); return; }
+          if (appData.coinsBalance < item.price) { showToast(`Te faltan ${item.price - appData.coinsBalance} monedas.`); return; }
+          appData.coinsBalance -= item.price; appData.settings[unlockedKey].push(id); appData.settings[equippedKey] = id; persistData(); if (onEquip) onEquip(); showToast(`¡Compraste y aplicaste "${name}"!`);
+        };
+        document.querySelectorAll("[data-music-id]").forEach((btn) => { btn.onclick = () => buyGeneric(MUSIC_TRACKS, "unlockedMusic", "equippedMusic", btn.getAttribute("data-music-id"), MUSIC_TRACKS.find((x) => x.id === btn.getAttribute("data-music-id")).name, () => soundEngine.restartMusic()); });
+        document.querySelectorAll("[data-trail-id]").forEach((btn) => { btn.onclick = () => buyGeneric(SHIP_TRAILS, "unlockedTrails", "equippedTrail", btn.getAttribute("data-trail-id"), SHIP_TRAILS.find((x) => x.id === btn.getAttribute("data-trail-id")).name, null); });
+
+        const tabThemes = byId("tab-shop-themes");
+        if (tabThemes) tabThemes.onclick = () => { uiState.shopTab = "themes"; renderApp(); };
+
+        document.querySelectorAll("[data-skin-id]").forEach((btn) => {
+          btn.onclick = () => {
+            const skinId = btn.getAttribute("data-skin-id");
+            const sk = NEON_SKINS.find((s) => s.id === skinId);
+            if (!sk) return;
+            const unlocked = appData.settings.unlockedSkins.includes(sk.id);
+            if (appData.settings.equippedSkin === sk.id) return;
+            if (unlocked) {
+              appData.settings.equippedSkin = sk.id;
+              persistData();
+              showToast(`Nave "${sk.name}" equipada.`);
+              return;
+            }
+            if (appData.coinsBalance < sk.price) {
+              showToast(`Te faltan ${sk.price - appData.coinsBalance} monedas.`);
+              return;
+            }
+            appData.coinsBalance -= sk.price;
+            appData.settings.unlockedSkins.push(sk.id);
+            appData.settings.equippedSkin = sk.id;
+            persistData();
+            showToast(`¡Compraste y equipaste "${sk.name}"!`);
+          };
+        });
+
+        document.querySelectorAll("[data-theme-id]").forEach((btn) => {
+          btn.onclick = () => {
+            const themeId = btn.getAttribute("data-theme-id");
+            const th = INTERFACE_THEMES.find((t) => t.id === themeId);
+            if (!th) return;
+            const unlocked = appData.settings.unlockedThemes.includes(th.id);
+            if (appData.settings.equippedTheme === th.id) return;
+            if (unlocked) {
+              appData.settings.equippedTheme = th.id;
+              canvasCache.key = "";
+              persistData();
+              showToast(`Tema "${th.name}" aplicado.`);
+              return;
+            }
+            if (appData.coinsBalance < th.price) {
+              showToast(`Te faltan ${th.price - appData.coinsBalance} monedas.`);
+              return;
+            }
+            appData.coinsBalance -= th.price;
+            appData.settings.unlockedThemes.push(th.id);
+            appData.settings.equippedTheme = th.id;
+            canvasCache.key = "";
+            persistData();
+            showToast(`¡Compraste y aplicaste "${th.name}"!`);
+          };
+        });
+
+        const tMusic = byId("toggle-music");
+        if (tMusic) {
+          tMusic.onclick = () => {
+            appData.settings.music = !appData.settings.music;
+            persistData();
+            if (appData.settings.music) soundEngine.startMusic();
+            else soundEngine.stopMusic();
+            renderApp();
+          };
+        }
+
+        const tSfx = byId("toggle-sfx");
+        if (tSfx) {
+          tSfx.onclick = () => {
+            appData.settings.sfx = !appData.settings.sfx;
+            persistData();
+            if (appData.settings.sfx) soundEngine.sfxCoin();
+            renderApp();
+          };
+        }
+
+        const rVol = byId("range-volume");
+        if (rVol) {
+          rVol.oninput = (e) => {
+            appData.settings.volume = Number(e.target.value);
+            persistData();
+            renderApp();
+          };
+        }
+
+        const tVib = byId("toggle-vibrate");
+        if (tVib) {
+          tVib.onclick = () => {
+            appData.settings.vibration = !appData.settings.vibration;
+            persistData();
+            if (appData.settings.vibration) triggerVibrate(25);
+            renderApp();
+          };
+        }
+
+        const tFps = byId("toggle-fps");
+        if (tFps) {
+          tFps.onclick = () => {
+            appData.settings.showFps = !appData.settings.showFps;
+            persistData();
+            renderApp();
+          };
+        }
+
+        // Control 100% táctil directo en el Canvas (1 toque salta, doble toque baja)
+        const canvas = byId("gameCanvas");
+        if (canvas) {
+          canvas.onpointerdown = (ev) => {
+            ev.preventDefault();
+            handleCanvasTouchAction();
+          };
+        }
+
+        const btnPause = byId("btn-pause-game");
+        if (btnPause) {
+          btnPause.onclick = () => {
+            if (uiState.resumeCountdown > 0 || uiState.gameOver) return;
+            uiState.paused = true;
+            renderApp();
+          };
+        }
+
+        const btnResume = byId("btn-resume-game");
+        if (btnResume) btnResume.onclick = () => beginResumeCountdown();
+
+        const btnRestartPause = byId("btn-restart-pause");
+        if (btnRestartPause) btnRestartPause.onclick = () => initGameSession();
+
+        const btnPlayAgain = byId("btn-play-again");
+        if (btnPlayAgain) btnPlayAgain.onclick = () => initGameSession();
+
+        const btnGoShopOver = byId("btn-go-shop-over");
+        if (btnGoShopOver) {
+          btnGoShopOver.onclick = () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            uiState.screen = "shop";
+            renderApp();
+          };
+        }
+
+        const btnQuitMenu = byId("btn-quit-menu");
+        if (btnQuitMenu) {
+          btnQuitMenu.onclick = () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            uiState.paused = false;
+            uiState.gameOver = false;
+            uiState.screen = "menu";
+            renderApp();
+          };
+        }
+
+        const btnCancelAlias = byId("btn-cancel-alias");
+        if (btnCancelAlias) {
+          btnCancelAlias.onclick = () => {
+            uiState.aliasModalOpen = false;
+            uiState.pendingPlayAfterAlias = false;
+            renderApp();
+          };
+        }
+
+        const btnSaveAlias = byId("btn-save-alias");
+        if (btnSaveAlias) {
+          btnSaveAlias.onclick = () => {
+            const inp = byId("input-player-alias");
+            const val = inp ? inp.value.trim() : "";
+            if (!val) {
+              showToast("Escribe un alias válido para continuar.");
+              return;
+            }
+            appData.settings.playerName = val;
+            persistData();
+            uiState.aliasModalOpen = false;
+            const shouldPlay = uiState.pendingPlayAfterAlias;
+            uiState.pendingPlayAfterAlias = false;
+            if (shouldPlay) {
+              initGameSession();
+            } else {
+              showToast(`Alias "${val}" guardado.`);
+            }
+          };
+        }
+
+        const btnCancelExit = byId("btn-cancel-exit");
+        if (btnCancelExit) {
+          btnCancelExit.onclick = () => {
+            uiState.exitModalOpen = false;
+            renderApp();
+          };
+        }
+
+        const btnConfirmExit = byId("btn-confirm-exit");
+        if (btnConfirmExit) {
+          btnConfirmExit.onclick = () => exitAndroidApplication();
+        }
+      }
+
+      window.addEventListener("keydown", (ev) => {
+        if (ev.repeat) return;
+        if (uiState.aliasModalOpen) {
+          if (ev.code === "Enter") {
+            const btn = document.getElementById("btn-save-alias");
+            if (btn) btn.click();
+          }
+          return;
+        }
+        if (uiState.screen === "game") {
+          if (ev.code === "Space" || ev.code === "ArrowUp" || ev.code === "KeyW") {
+            ev.preventDefault();
+            requestJump();
+          } else if (ev.code === "ArrowDown" || ev.code === "KeyS") {
+            ev.preventDefault();
+            requestFastFall();
+          } else if (ev.code === "KeyP" || ev.code === "Escape") {
+            if (!uiState.gameOver && uiState.resumeCountdown === 0) {
+              if (uiState.paused) beginResumeCountdown();
+              else { uiState.paused = true; renderApp(); }
+            }
+          }
+        }
+      });
+
+      renderApp();
+    })();
+  </script>
+</body>
+</html>
