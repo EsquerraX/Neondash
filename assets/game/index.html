@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#070812">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>Neon Dash - Torneo Oficial</title>
+  <title>Neon Dash PRO - Torneo Oficial</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden !important;
+      overflow: hidden !important;overscroll-behavior:none;
       background: #03040a;
       color: var(--text);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -67,7 +67,7 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      overflow: hidden !important;
+      overflow: hidden !important;overscroll-behavior:none;
       padding-top: var(--safe-top);
       padding-bottom: var(--safe-bottom);
       padding-left: var(--safe-left);
@@ -188,7 +188,7 @@
       justify-content: center;
     }
 
-    canvas#gameCanvas {
+    canvas#gameCanvas{will-change:transform;
       width: 100%;
       height: 100%;
       display: block;
@@ -342,7 +342,7 @@
       // =========================================================================
       // 1. CONSTANTES, CATÁLOGOS DE SKINS DISTINTAS Y TEMAS MEJORADOS
       // =========================================================================
-      const STORE_KEY = "neonDashOfflineDB_v4_pro";
+      const STORE_KEY = "neonDashProDB_v5";
       const CYAN = "#00f0ff";
       const PINK = "#ff2ea6";
       const GOLD = "#ffe14d";
@@ -555,12 +555,12 @@
       // Las frecuencias base son las mismas en todos: 0 assets, 0 descargas, 0 memoria extra.
       const MUSIC_SCALE = [110, 130.81, 146.83, 164.81, 196, 220, 246.94, 261.63, 293.66, 329.63, 392, 440];
       const MUSIC_TRACKS = [
-        { id: "neon_base", name: "Neón Base", subtitle: "Synthwave clásico · 130 BPM", price: 0, bpm: 130, wave: "sawtooth", bass: [0,0,1,2,0,0,3,2], lead: [7, -1, 9, -1, 10, -1, 9, 7], leadVol: 0.035, hat: true },
-        { id: "turbo_160", name: "Turbo 160", subtitle: "Rápido y agresivo · 160 BPM", price: 30, bpm: 160, wave: "sawtooth", bass: [0,0,2,0,1,2,3,3], lead: [7,9,10,9,11,10,9,7], leadVol: 0.04, hat: true },
-        { id: "chill_90", name: "Chill 90", subtitle: "Relajado · 90 BPM, onda suave", price: 35, bpm: 90, wave: "triangle", bass: [0,-1,1,-1,2,-1,3,-1], lead: [4, -1, 5, -1, 7, -1, 5, 4], leadVol: 0.05, hat: false },
-        { id: "boss_140", name: "Modo Boss", subtitle: "Tenso · 140 BPM, bajo grave", price: 50, bpm: 140, wave: "square", bass: [0,0,0,2,0,0,1,2], lead: [7,7,10,-1,11,-1,10,7], leadVol: 0.028, hat: true },
-        { id: "retro_8bit", name: "Retro 8-Bit", subtitle: "Arcade · 145 BPM, onda cuadrada", price: 55, bpm: 145, wave: "square", bass: [0,2,0,1,0,2,3,2], lead: [7,9,7,10,9,11,10,9], leadVol: 0.032, hat: true },
-        { id: "aurora_100", name: "Aurora 100", subtitle: "Espacial · 100 BPM, eco suave", price: 65, bpm: 100, wave: "sine", bass: [0,-1,2,-1,1,-1,3,-1], lead: [8, -1, 10, -1, 11, -1, 10, 8], leadVol: 0.055, hat: false }
+        { id: "neon_base", name: "Neón Base", subtitle: "Synthwave clásico · 130 BPM", price: 0, bpm: 130, wave: "sawtooth", filter: 2200, kick: true, bass: [0,0,-1,0, 1,-1,2,-1, 0,0,-1,0, 3,-1,2,-1], lead: [7,-1,9,-1, 10,-1,9,-1, 7,-1,11,-1, 10,9,7,-1], pad: [0,2], leadVol: 0.035, hat: true },
+        { id: "turbo_160", name: "Turbo 160", subtitle: "Rápido y agresivo · 160 BPM", price: 30, bpm: 160, wave: "sawtooth", filter: 3200, kick: true, bass: [0,0,2,0, 1,2,3,3, 0,0,2,0, 1,2,3,2], lead: [7,9,10,9, 11,10,9,7, 7,9,10,11, 10,9,7,-1], pad: [0,3], leadVol: 0.04, hat: true },
+        { id: "chill_90", name: "Chill 90", subtitle: "Relajado · 90 BPM, onda suave", price: 35, bpm: 90, wave: "triangle", filter: 1600, kick: false, bass: [0,-1,-1,-1, 1,-1,-1,-1, 2,-1,-1,-1, 3,-1,2,-1], lead: [4,-1,5,-1, 7,-1,5,-1, 4,-1,7,-1, 8,-1,7,-1], pad: [0,2,4], leadVol: 0.05, hat: false },
+        { id: "boss_140", name: "Modo Boss", subtitle: "Tenso · 140 BPM, bajo grave", price: 50, bpm: 140, wave: "square", filter: 1400, kick: true, bass: [0,0,0,2, 0,0,1,2, 0,0,0,2, 1,2,3,2], lead: [7,7,-1,10, -1,11,-1,10, 7,7,-1,10, 11,-1,10,7], pad: [0,1], leadVol: 0.028, hat: true },
+        { id: "retro_8bit", name: "Retro 8-Bit", subtitle: "Arcade · 145 BPM, onda cuadrada", price: 55, bpm: 145, wave: "square", filter: 3800, kick: true, bass: [0,2,0,1, 0,2,3,2, 0,2,0,1, 3,2,1,2], lead: [7,9,7,10, 9,11,10,9, 7,9,7,10, 11,10,9,7], pad: [0], leadVol: 0.032, hat: true },
+        { id: "aurora_100", name: "Aurora 100", subtitle: "Espacial · 100 BPM, eco suave", price: 65, bpm: 100, wave: "sine", filter: 1200, kick: false, bass: [0,-1,-1,-1, 2,-1,-1,-1, 1,-1,-1,-1, 3,-1,2,-1], lead: [8,-1,10,-1, 11,-1,10,-1, 8,-1,11,-1, 10,-1,8,-1], pad: [0,2,4,5], leadVol: 0.055, hat: false }
       ];
       // ---- ESTELAS: solo color + forma, reutilizan el dibujo del jugador ----
       const SHIP_TRAILS = [
@@ -756,7 +756,7 @@
         pause: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>',
         heartFull: '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
         heartEmpty: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
-        coin: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#ffe14d" stroke="#b45309" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10" stroke="#92400e" stroke-linecap="round"/></svg>',
+        coin: '<svg width="15" height="15" viewBox="0 0 24 24"><defs><radialGradient id="ndc" cx="38%" cy="32%"><stop offset="0%" stop-color="#fff7b0"/><stop offset="55%" stop-color="#ffe14d"/><stop offset="100%" stop-color="#f59e0b"/></radialGradient></defs><circle cx="12" cy="12" r="10.5" fill="url(#ndc)" stroke="#92400e" stroke-width="1.6"/><circle cx="12" cy="12" r="7.2" fill="none" stroke="#92400e" stroke-width="1" opacity=".65"/><ellipse cx="9" cy="7.5" rx="3" ry="1.6" fill="#fff" opacity=".75"/><path d="M12 6.6l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3L7.2 10l3.3-.5z" fill="#92400e"/></svg>',
         restart: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>'
       };
 
@@ -822,8 +822,8 @@
             equippedTrail: "sin_estela",
             unlockedTrails: ["sin_estela"],
             randomSkin: false, randomTheme: false, randomMusic: false, randomTrail: false,
-            playerName: ""
           },
+          recentRuns: [],
           coinsBalance: 25,
           stats: {
             gamesPlayed: 0,
@@ -831,11 +831,6 @@
             bestRunDistance: 0,
             totalCoinsEarned: 25
           },
-          leaderboard: [
-            { id: "bot_1", name: "Valkiria_99", totalScore: 1840, bestRun: 620, games: 4 },
-            { id: "bot_2", name: "CyberPulse", totalScore: 1290, bestRun: 485, games: 3 },
-            { id: "bot_3", name: "KairoDrift", totalScore: 860, bestRun: 340, games: 3 }
-          ],
           missions: createDefaultMissions()
         };
 
@@ -867,7 +862,7 @@
             settings: mergedSettings,
             coinsBalance: typeof parsed.coinsBalance === "number" ? parsed.coinsBalance : fallback.coinsBalance,
             stats: { ...fallback.stats, ...(parsed.stats || {}) },
-            leaderboard: Array.isArray(parsed.leaderboard) && parsed.leaderboard.length ? parsed.leaderboard : fallback.leaderboard,
+            recentRuns: Array.isArray(parsed.recentRuns) ? parsed.recentRuns.slice(0, 10) : [],
             missions: Array.isArray(parsed.missions) && parsed.missions.length === 3 ? parsed.missions : createDefaultMissions()
           };
         } catch (err) {
@@ -883,7 +878,7 @@
             settings: appData.settings,
             coinsBalance: appData.coinsBalance,
             stats: appData.stats,
-            leaderboard: appData.leaderboard,
+            recentRuns: appData.recentRuns,
             missions: appData.missions
           }));
         } catch (err) {}
@@ -909,11 +904,20 @@
         getGain() {
           return Math.max(0, Math.min(1, (appData.settings.volume || 0) / 100));
         },
-        playTone(freq, type, duration, volMult, slideFreq) {
+        musicBus: null, musicFilter: null,
+        ensureMusicBus() {
+          if (!this.ctx) return;
+          if (!this.musicBus) {
+            this.musicBus = this.ctx.createGain(); this.musicBus.gain.value = 0.9;
+            this.musicFilter = this.ctx.createBiquadFilter(); this.musicFilter.type = "lowpass"; this.musicFilter.frequency.value = 2200;
+            this.musicBus.connect(this.musicFilter); this.musicFilter.connect(this.ctx.destination);
+          }
+        },
+        playTone(freq, type, duration, volMult, slideFreq, delay) {
           if (!appData.settings.sfx) return;
           this.init();
           if (!this.ctx) return;
-          const now = this.ctx.currentTime;
+          const now = this.ctx.currentTime + (delay || 0);
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = type;
@@ -930,13 +934,20 @@
           osc.stop(now + duration);
         },
         sfxJump() {
-          this.playTone(260, "triangle", 0.14, 0.24, 620);
+          this.playTone(240, "triangle", 0.13, 0.22, 640);
+          this.playTone(120, "sine", 0.08, 0.10, 60, 0.02);
         },
         sfxFastFall() {
           this.playTone(460, "sine", 0.11, 0.20, 140);
         },
         sfxCoin() {
-          this.playTone(880, "sine", 0.11, 0.22, 1320);
+          this.playTone(880, "sine", 0.10, 0.20, 1320);
+          this.playTone(1760, "sine", 0.14, 0.14, 1760, 0.06);
+        },
+        sfxRecord() {
+          this.playTone(523, "triangle", 0.12, 0.22, 523);
+          this.playTone(784, "triangle", 0.12, 0.22, 784, 0.10);
+          this.playTone(1046, "triangle", 0.22, 0.24, 1046, 0.20);
         },
         sfxHit() {
           this.playTone(170, "sawtooth", 0.24, 0.30, 52);
@@ -953,7 +964,7 @@
           const vol = Math.max(0.001, this.getGain() * volMult);
           gain.gain.setValueAtTime(vol, now);
           gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
-          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.connect(gain); gain.connect(this.musicBus || this.ctx.destination);
           osc.start(now); osc.stop(now + duration);
         },
         startMusic() {
@@ -961,14 +972,22 @@
           this.init(); if (!this.ctx) return;
           this.isPlaying = true; this.step = 0;
           const track = getActiveMusic();
-          const stepMs = Math.max(120, Math.round(60000 / track.bpm / 2)); // corcheas
+          const stepMs = Math.max(110, Math.round(60000 / track.bpm / 2));
           this.stepTimer = setInterval(() => {
             if (!appData.settings.music || !this.isPlaying || document.hidden) return;
             if (uiState.screen === "game" && uiState.paused) return;
-            const t = getActiveMusic(); const i = this.step % 8; this.step++;
+            this.ensureMusicBus();
+            if (this.musicFilter) this.musicFilter.frequency.setTargetAtTime(getActiveMusic().filter || 2200, this.ctx.currentTime, 0.1);
+            const t = getActiveMusic(); const i = this.step % 16; const bar = Math.floor(this.step / 16); this.step++;
             const bassIdx = t.bass[i]; if (bassIdx >= 0) this.playMusicNote(MUSIC_SCALE[bassIdx], t.wave, 0.19, 0.065);
-            const leadIdx = t.lead[i]; if (leadIdx >= 0) this.playMusicNote(MUSIC_SCALE[leadIdx], t.wave === "square" ? "triangle" : "sine", 0.16, t.leadVol);
-            if (t.hat && i % 2 === 1) this.playMusicNote(5200, "sine", 0.03, 0.012);
+            if (t.kick && i % 4 === 0) this.playMusicNote(58, "sine", 0.12, 0.14);
+            if (i % 8 === 0 && t.pad) t.pad.forEach((pi) => this.playMusicNote(MUSIC_SCALE[pi] * 2, "sine", 0.55, 0.018));
+            const leadIdx = t.lead[i];
+            if (leadIdx >= 0) {
+              const oct = (bar % 2 === 1) ? 2 : 1;
+              this.playMusicNote(MUSIC_SCALE[leadIdx] * oct, t.wave === "square" ? "triangle" : "sine", 0.16, t.leadVol);
+            }
+            if (t.hat && i % 2 === 1) this.playMusicNote(5200, "sine", 0.03, 0.010);
           }, stepMs);
         },
         restartMusic() { this.stopMusic(); if (appData.settings.music) this.startMusic(); },
@@ -991,83 +1010,33 @@
       // =========================================================================
       // 6. SALIDA NATIVA REAL PARA ANDROID / WEBVIEW / CAPACITOR / CORDOVA
       // =========================================================================
+      // PRO NATIVO: game/ -> GitHub Actions -> APK/AAB offline. Sin WebView: el shell nativo escucha NeonDashPro.
       function exitAndroidApplication() {
-        soundEngine.stopMusic();
-        persistData();
-
-        // 1. Puentes nativos comunes en Android WebView / APK Builders
-        const bridges = [
-          window.Android,
-          window.AndroidInterface,
-          window.AppInventor,
-          window.Kodular,
-          window.Niotron,
-          window.WebViewBridge,
-          window.JSInterface
-        ];
-
-        for (let i = 0; i < bridges.length; i++) {
-          const b = bridges[i];
-          if (!b) continue;
-          try {
-            if (typeof b.exitApp === "function") { b.exitApp(); return; }
-            if (typeof b.closeApp === "function") { b.closeApp(); return; }
-            if (typeof b.finish === "function") { b.finish(); return; }
-            if (typeof b.finishActivity === "function") { b.finishActivity(); return; }
-            if (typeof b.quit === "function") { b.quit(); return; }
-          } catch (e) {}
+        soundEngine.stopMusic(); persistData();
+        const payload = JSON.stringify({ type: "EXIT_APP", action: "exit" });
+        const channels = ["NeonDashPro","FlutterApp","ExitApp","FlutterChannel","AndroidBridge","AppBridge"];
+        for (const name of channels) {
+          try { const ch = window[name]; if (ch && typeof ch.postMessage === "function") { ch.postMessage(payload); return; } } catch (e) {}
         }
-
-        // 2. Capacitor / Cordova / Ionic
-        try {
-          if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.exitApp === "function") {
-            window.Capacitor.Plugins.App.exitApp();
-            return;
-          }
-        } catch (e) {}
-
-        try {
-          if (navigator.app && typeof navigator.app.exitApp === "function") {
-            navigator.app.exitApp();
-            return;
-          }
-        } catch (e) {}
-
-        // 3. Flutter InAppWebView / React Native WebView
-        try {
-          if (window.flutter_inappwebview && typeof window.flutter_inappwebview.callHandler === "function") {
-            window.flutter_inappwebview.callHandler("exitApp");
-            return;
-          }
-        } catch (e) {}
-
-        try {
-          if (window.ReactNativeWebView && typeof window.ReactNativeWebView.postMessage === "function") {
-            window.ReactNativeWebView.postMessage(JSON.stringify({ type: "EXIT_APP" }));
-          }
-        } catch (e) {}
-
-        // 4. Cierre estándar de pestaña/ventana WebView + respaldo si el contenedor bloquea window.close()
-        try { window.open("", "_self"); } catch (e) {}
-        try { window.close(); } catch (e) {}
-
-        setTimeout(() => {
-          uiState.exitModalOpen = false;
-          showToast("Progreso guardado. Usa el botón Atrás de Android para cerrar.");
-        }, 250);
+        try { if (window.flutter_inappwebview && typeof window.flutter_inappwebview.callHandler === "function") { window.flutter_inappwebview.callHandler("exitApp", payload); return; } } catch (e) {}
+        try { if (window.Flutter && typeof window.Flutter.postMessage === "function") { window.Flutter.postMessage(payload); return; } } catch (e) {}
+        try { window.parent.postMessage(payload, "*"); } catch (e) {}
+        const bridges = [window.Android, window.AndroidInterface, window.WebViewBridge, window.JSInterface];
+        for (const b of bridges) { if (!b) continue; try { if (typeof b.exitApp === "function") { b.exitApp(); return; } if (typeof b.closeApp === "function") { b.closeApp(); return; } if (typeof b.finish === "function") { b.finish(); return; } } catch (e) {} }
+        try { if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.exitApp === "function") { window.Capacitor.Plugins.App.exitApp(); return; } } catch (e) {}
+        try { if (navigator.app && typeof navigator.app.exitApp === "function") { navigator.app.exitApp(); return; } } catch (e) {}
+        try { window.open("", "_self"); window.close(); } catch (e) {}
+        setTimeout(() => { uiState.exitModalOpen = false; showToast("Si la app no se cerró, tu 【entity-Flutter¦canonical_name=Flutter】 nativo debe exponer el canal NeonDashPro.postMessage('exit') -> SystemNavigator.pop()."); }, 250);
       }
-
-      // =========================================================================
+// =========================================================================
       // 7. ESTADO DE UI, CACHE DE GRADIENTES Y HELPERS
       // =========================================================================
       const uiState = {
-        screen: "menu", // menu | shop | tournament | settings | game
+        screen: "menu", // menu | shop | record | settings | game
         shopTab: "skins", // skins | themes
         paused: false,
         gameOver: false,
         resumeCountdown: 0,
-        aliasModalOpen: false,
-        pendingPlayAfterAlias: false,
         exitModalOpen: false,
         toastMsg: "",
         toastTimer: null,
@@ -1192,32 +1161,11 @@
         return Math.min(1.85, 1 + Math.floor(streak / 3) * 0.05);
       }
 
-      function getSortedLeaderboard() {
-        const list = appData.leaderboard.map((item) => ({ ...item }));
-        const alias = (appData.settings.playerName || "").trim();
-        if (alias) {
-          const existing = list.find((p) => p.id === "local_player");
-          if (existing) {
-            existing.name = alias;
-            existing.totalScore = appData.stats.totalScore;
-            existing.bestRun = appData.stats.bestRunDistance;
-            existing.games = appData.stats.gamesPlayed;
-          } else {
-            list.push({
-              id: "local_player",
-              name: alias,
-              totalScore: appData.stats.totalScore,
-              bestRun: appData.stats.bestRunDistance,
-              games: appData.stats.gamesPlayed
-            });
-          }
-        }
-        return list.sort((a, b) => b.totalScore - a.totalScore || b.bestRun - a.bestRun);
-      }
-
       // =========================================================================
       // 8. MOTOR DEL JUEGO CANVAS 2D (360x480) - OPTIMIZADO PARA MÓVIL
       // =========================================================================
+      const GROUND_Y = 360;
+      const SHIP_REST_Y = GROUND_Y - 36;
       let game = null;
       let rafId = 0;
       let lastFrameTime = 0;
@@ -1254,7 +1202,7 @@
         }));
 
         game = {
-          y: 380,
+          y: SHIP_REST_Y,
           vy: 0,
           grounded: true,
           jumpBuffer: 0,
@@ -1309,13 +1257,7 @@
         startLoop();
       }
 
-      function triggerBanner(text, sub, color) {
-        if (!game) return;
-        game.bannerText = text;
-        game.bannerSub = sub || "";
-        game.bannerColor = color || CYAN;
-        game.bannerTimer = 80;
-      }
+      function triggerBanner() { /* PRO: desactivado, sin flotantes */ }
 
       function executeJump() {
         if (!game) return;
@@ -1329,7 +1271,7 @@
           for (let i = 0; i < 7; i++) {
             game.parts.push({
               x: 68 + (Math.random() - 0.5) * 14,
-              y: 412,
+              y: GROUND_Y - 4,
               vx: (Math.random() - 0.5) * 210,
               vy: Math.random() * 120 + 48,
               life: 0.32,
@@ -1413,7 +1355,7 @@
             appData.stats.totalCoinsEarned += m.reward;
             changed = true;
             soundEngine.sfxCoin();
-            triggerBanner("MISIÓN CUMPLIDA", `+${m.reward} monedas para Tienda`, GOLD);
+            // PRO: recompensa sin banner flotante.
           }
         }
         if (changed) {
@@ -1438,7 +1380,11 @@
         appData.stats.totalCoinsEarned += coinsEarned;
         if (beatRecord) {
           appData.stats.bestRunDistance = finalMeters;
+          soundEngine.sfxRecord();
         }
+        appData.recentRuns = appData.recentRuns || [];
+        appData.recentRuns.unshift({ score: finalMeters, coins: coinsEarned, date: Date.now(), isRecord: beatRecord });
+        appData.recentRuns = appData.recentRuns.slice(0, 10);
 
         uiState.isNewRecordRun = beatRecord;
         uiState.lastRunSummary = {
@@ -1493,29 +1439,24 @@
               game.speed = game.baseSpeed * game.speedMult;
 
               const dx = game.speed * dt;
-              game.rawDist += dx * 0.14;
+              game.rawDist += dx * 0.105; // PRO: metros suben ~25% más lento, velocidad de juego intacta
               game.meters = Math.floor(game.rawDist);
 
-              if (game.meters >= game.nextMilestone) {
-                const reached = game.nextMilestone;
-                triggerBanner(`HITO ${reached}m`, "Meta de torneo alcanzada", theme.accent);
-                game.nextMilestone = getNextMilestone(reached);
-              }
+              // PRO: sin hitos flotantes. El progreso solo se ve en la barra inferior y en el recuadro de metros.
+              if (game.meters >= game.nextMilestone) { game.nextMilestone = getNextMilestone(game.nextMilestone); }
 
               if (game.prevBestAtStart > 0 && !game.liveRecordBeat && game.meters > game.prevBestAtStart) {
                 game.liveRecordBeat = true;
                 game.recordMarkerPassed = true;
-                triggerBanner("★ RÉCORD EN VIVO", `Superaste ${game.prevBestAtStart}m`, GOLD);
               }
 
-              if (game.bannerTimer > 0) game.bannerTimer = Math.max(0, game.bannerTimer - stepScale);
               if (game.jumpBuffer > 0) game.jumpBuffer = Math.max(0, game.jumpBuffer - dt);
 
               const gravity = game.fastFalling ? 5850 : 3168;
               game.vy += gravity * dt;
               game.y += game.vy * dt;
-              if (game.y >= 380) {
-                game.y = 380;
+              if (game.y >= SHIP_REST_Y) {
+                game.y = SHIP_REST_Y;
                 game.vy = 0;
                 game.grounded = true;
                 game.fastFalling = false;
@@ -1615,11 +1556,11 @@
                   if (patternType === 0) {
                     for (let j = 0; j < 5; j++) {
                       const arc = Math.sin((j / 4) * Math.PI) * -42;
-                      game.coins.push({ x: 380 + j * 30, y: 362 + arc, taken: false, variant, spin: j * 0.3 });
+                      game.coins.push({ x: 380 + j * 30, y: 306 + arc, taken: false, variant, spin: j * 0.3 });
                     }
                   } else if (patternType === 1) {
                     for (let j = 0; j < 4; j++) {
-                      game.coins.push({ x: 380 + j * 32, y: 374, taken: false, variant, spin: j * 0.3 });
+                      game.coins.push({ x: 380 + j * 32, y: 262, taken: false, variant, spin: j * 0.3 });
                     }
                   } else if (patternType === 2) {
                     for (let j = 0; j < 4; j++) {
@@ -1630,7 +1571,7 @@
                       const vMix = COIN_VARIANTS[j % COIN_VARIANTS.length];
                       game.coins.push({
                         x: 380 + j * 30,
-                        y: j % 2 === 0 ? 372 : 334,
+                        y: j % 2 === 0 ? 316 : 278,
                         taken: false,
                         variant: vMix,
                         spin: j * 0.5
@@ -1709,7 +1650,7 @@
               if (game.invuln === 0) {
                 for (let i = 0; i < game.obstacles.length; i++) {
                   const o = game.obstacles[i];
-                  if (game.invuln === 0 && 89 > o.x + 4 && 59 < o.x + o.w - 4 && game.y + 32 > 416 - o.h) {
+                  if (game.invuln === 0 && 89 > o.x + 4 && 59 < o.x + o.w - 4 && game.y + 32 > GROUND_Y - o.h) {
                     game.hearts--;
                     game.streak = 0;
                     game.invuln = 90;
@@ -1783,7 +1724,7 @@
         const cacheKey = `${theme.id}|${biome.skyTop}`;
         if (canvasCache.key !== cacheKey) {
           canvasCache.key = cacheKey;
-          const sg = ctx.createLinearGradient(0, 0, 0, 416);
+          const sg = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
           sg.addColorStop(0, biome.skyTop);
           sg.addColorStop(0.5, theme.skyMid);
           sg.addColorStop(0.85, theme.skyLow);
@@ -1863,7 +1804,7 @@
           const b = game.farBuildings[i];
           let bx = b.x - farScroll;
           if (bx + b.w < 0) bx += 544;
-          const by = 416 - b.h;
+          const by = GROUND_Y - b.h;
           ctx.fillStyle = "rgba(10, 12, 30, 0.78)";
           ctx.fillRect(bx, by, b.w, b.h);
           ctx.strokeStyle = b.hue === CYAN ? "rgba(0, 240, 255, 0.25)" : "rgba(255, 46, 166, 0.25)";
@@ -1877,7 +1818,7 @@
           const b = game.nearBuildings[i];
           let bx = b.x - nearScroll;
           if (bx + b.w < 0) bx += 546;
-          const by = 416 - b.h;
+          const by = GROUND_Y - b.h;
           ctx.fillStyle = "#080a1c";
           ctx.fillRect(bx, by, b.w, b.h);
           ctx.strokeStyle = b.accent;
@@ -1902,28 +1843,28 @@
 
         // 6. Suelo con rejilla synthwave en perspectiva
         ctx.fillStyle = theme.groundBg;
-        ctx.fillRect(0, 416, W, 64);
+        ctx.fillRect(0, GROUND_Y, W, 120);
 
         // Baliza fantasma de récord personal
         if (game.prevBestAtStart > 0 && !game.recordMarkerPassed) {
           const deltaMeters = game.prevBestAtStart - game.meters;
-          const markerX = 75 + (deltaMeters / 0.14);
+          const markerX = 75 + (deltaMeters / 0.105);
           if (markerX >= -20 && markerX <= W + 24) {
             ctx.save();
             ctx.strokeStyle = GOLD;
             ctx.setLineDash([4, 4]);
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.moveTo(markerX, 344);
-            ctx.lineTo(markerX, 416);
+            ctx.moveTo(markerX, GROUND_Y - 72);
+            ctx.lineTo(markerX, GROUND_Y);
             ctx.stroke();
             ctx.setLineDash([]);
 
             ctx.fillStyle = GOLD;
             ctx.beginPath();
             ctx.moveTo(markerX, 344);
-            ctx.lineTo(markerX + 18, 351);
-            ctx.lineTo(markerX, 358);
+            ctx.lineTo(markerX + 18, GROUND_Y - 65);
+            ctx.lineTo(markerX, GROUND_Y - 58);
             ctx.closePath();
             ctx.fill();
 
@@ -1936,18 +1877,21 @@
 
         // Línea de horizonte con doble halo rápido (cero shadowBlur lag)
         ctx.fillStyle = theme.horizonLine;
+        ctx.globalAlpha = 0.10;
+        ctx.fillRect(0, GROUND_Y - 26, W, 26);
+        ctx.fillStyle = theme.horizonLine;
         ctx.globalAlpha = 0.28;
-        ctx.fillRect(0, 413, W, 9);
+        ctx.fillRect(0, GROUND_Y - 3, W, 9);
         ctx.globalAlpha = 1;
-        ctx.fillRect(0, 416, W, 3);
+        ctx.fillRect(0, GROUND_Y, W, 3);
 
         // Líneas horizontales de la rejilla
         ctx.strokeStyle = theme.gridH;
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(0, 428); ctx.lineTo(W, 428);
-        ctx.moveTo(0, 444); ctx.lineTo(W, 444);
-        ctx.moveTo(0, 464); ctx.lineTo(W, 464);
+        ctx.moveTo(0, GROUND_Y + 12); ctx.lineTo(W, GROUND_Y + 12);
+        ctx.moveTo(0, GROUND_Y + 28); ctx.lineTo(W, GROUND_Y + 28);
+        ctx.moveTo(0, GROUND_Y + 48); ctx.lineTo(W, GROUND_Y + 48);
         ctx.stroke();
 
         // Líneas diagonales en movimiento de la rejilla
@@ -1993,6 +1937,13 @@
             ctx.beginPath();
             ctx.arc(-2.5, -2.5, 3.2, 0, Math.PI * 2);
             ctx.fill();
+            ctx.fillStyle = "rgba(255,255,255,.85)";
+            ctx.beginPath(); ctx.ellipse(-3.5, -4.5, 3.4, 1.7, -0.6, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = v.stroke;
+            ctx.font = "900 11px 'Orbitron',sans-serif";
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 1; ctx.strokeText("★", 0, 0.5);
+            ctx.fillText("★", 0, 0.5);
           } else if (v.shape === "hex") {
             ctx.beginPath();
             for (let k = 0; k < 6; k++) {
@@ -2059,14 +2010,14 @@
         // 8. Obstáculos de colores neón con borde superior brillante
         for (let i = 0; i < game.obstacles.length; i++) {
           const o = game.obstacles[i];
-          const topY = 416 - o.h;
+          const topY = GROUND_Y - o.h;
 
           if (o.spike) {
             ctx.fillStyle = o.pal.main;
             ctx.beginPath();
-            ctx.moveTo(o.x, 416);
+            ctx.moveTo(o.x, GROUND_Y);
             ctx.lineTo(o.x + o.w / 2, topY);
-            ctx.lineTo(o.x + o.w, 416);
+            ctx.lineTo(o.x + o.w, GROUND_Y);
             ctx.closePath();
             ctx.fill();
 
@@ -2076,9 +2027,9 @@
 
             ctx.fillStyle = o.pal.stripe;
             ctx.beginPath();
-            ctx.moveTo(o.x + o.w * 0.34, 416);
+            ctx.moveTo(o.x + o.w * 0.34, GROUND_Y);
             ctx.lineTo(o.x + o.w / 2, topY + 10);
-            ctx.lineTo(o.x + o.w * 0.66, 416);
+            ctx.lineTo(o.x + o.w * 0.66, GROUND_Y);
             ctx.closePath();
             ctx.fill();
           } else {
@@ -2152,36 +2103,7 @@
         }
         ctx.globalAlpha = 1;
 
-        // 13. Banners flotantes dentro del canvas
-        if (game.bannerTimer > 0 && game.bannerText) {
-          const alpha = Math.min(1, game.bannerTimer / 18);
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = "rgba(8, 10, 24, 0.86)";
-          ctx.strokeStyle = game.bannerColor;
-          ctx.lineWidth = 1.6;
-          const bw = 240;
-          const bh = game.bannerSub ? 46 : 32;
-          const bx = (W - bw) / 2;
-          const by = 44;
-          ctx.beginPath();
-          ctx.roundRect(bx, by, bw, bh, 12);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.fillStyle = game.bannerColor;
-          ctx.font = "800 13px 'Orbitron', system-ui, sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(game.bannerText, W / 2, by + 20);
-
-          if (game.bannerSub) {
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "600 11px 'Inter', system-ui, sans-serif";
-            ctx.fillText(game.bannerSub, W / 2, by + 36);
-          }
-          ctx.restore();
-        }
-
+        // 13. PRO: sin banners flotantes (hitos / misiones / récord). El récord vivo solo se marca en el HUD.
         // Flash rojo suave al recibir impacto
         if (game.hitFlash > 0) {
           ctx.fillStyle = `rgba(255,30,86,${(game.hitFlash / 32).toFixed(2)})`;
@@ -2200,7 +2122,8 @@
         const heartsEl = document.getElementById("hud-hearts-row");
         const coinsEl = document.getElementById("hud-coins-val");
         const fpsEl = document.getElementById("hud-fps-val");
-        const missionsEl = document.getElementById("hud-missions-grid");
+        const bottomFill = document.getElementById("hud-bottom-fill");
+        const bottomVal = document.getElementById("hud-bottom-val");
 
         if (labelEl) {
           labelEl.textContent = game.liveRecordBeat ? "★ RÉCORD EN VIVO · 1m = 1pt" : "DISTANCIA / SCORE (1m = 1pt)";
@@ -2221,15 +2144,12 @@
             `<span style="color:${idx <= game.hearts ? "#f87171" : "rgba(255,255,255,0.18)"};display:inline-flex;">${idx <= game.hearts ? ICONS.heartFull : ICONS.heartEmpty}</span>`
           ).join("");
         }
-        if (coinsEl) {
-          coinsEl.textContent = `🪙 +${game.coinCount}`;
-        }
+        if (coinsEl) { const sp = coinsEl.querySelector("span"); if (sp) sp.textContent = "+" + game.coinCount; else coinsEl.textContent = "+" + game.coinCount; }
         if (fpsEl) {
           fpsEl.textContent = `${currentFps} FPS`;
         }
-        if (missionsEl) {
-          missionsEl.innerHTML = renderMissionsHtml();
-        }
+        if (bottomFill) bottomFill.style.width = Math.min(100, appData.stats.bestRunDistance > 0 ? Math.round((game.meters / appData.stats.bestRunDistance) * 100) : 0) + "%";
+        if (bottomVal) bottomVal.textContent = game.meters.toLocaleString() + "m";
       }
 
       function renderMissionsHtml() {
@@ -2261,8 +2181,6 @@
         root.style.setProperty("--accent", theme.accent);
         root.style.setProperty("--secondary", theme.secondary);
 
-        const aliasText = appData.settings.playerName ? appData.settings.playerName : "Sin alias";
-
         let mainHtml = "";
 
         // -----------------------------------------------------------------------
@@ -2275,10 +2193,10 @@
                 <div class="anim-floaty" style="width:68px;height:68px;margin:0 auto;border-radius:20px;background:rgba(0,0,0,0.45);border:1px solid ${skin.body}66;display:grid;place-items:center;box-shadow:0 12px 26px ${skin.glow};">
                   ${getSkinPreviewSvg(skin)}
                 </div>
-                <h1 class="font-display" style="font-size:27px;line-height:1.05;margin:10px 0 0;">NEON DASH</h1>
+                <h1 class="font-display" style="font-size:27px;line-height:1.05;margin:10px 0 0;">NEON DASH <span style="color:#ffe14d;">PRO</span></h1>
                 <p class="font-display" style="font-size:11.5px;letter-spacing:0.18em;color:${theme.secondary};margin:4px 0 0;">MODO INFINITO · 3 VIDAS</p>
                 <p style="font-size:12.5px;color:rgba(255,255,255,0.8);margin:8px 0 0;line-height:1.4;">
-                  Cada <strong style="color:#fff;">1 metro = 1 punto</strong>. Todas tus partidas suman para el Torneo $1000. Las monedas sirven para la <strong style="color:${GOLD};">Tienda</strong>.
+                  Cada <strong style="color:#fff;">1 metro = 1 punto</strong>. Tus últimas 10 partidas quedan en <strong style="color:${GOLD};">Tu Récord</strong>. Las monedas sirven para la <strong style="color:${GOLD};">Tienda</strong>.
                 </p>
                 <div style="display:flex;justify-content:center;gap:6px;margin-top:10px;flex-wrap:wrap;font-size:11px;">
                   <span style="padding:4px 9px;border-radius:999px;background:rgba(0,0,0,0.38);">♥♥♥ 3 vidas</span>
@@ -2293,9 +2211,9 @@
               </button>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
-                <button id="btn-open-tournament" class="btn-outline">
+                <button id="btn-open-record" class="btn-outline" style="border-color:${GOLD}55;color:${GOLD};">
                   ${ICONS.trophy}
-                  <span>TORNEO $1000</span>
+                  <span>MI RÉCORD</span>
                 </button>
                 <button id="btn-open-shop" class="btn-outline" style="border-color:${GOLD}55;color:${GOLD};">
                   ${ICONS.shop}
@@ -2317,6 +2235,11 @@
                   <div class="font-display" style="font-size:16px;color:#fff;margin-top:2px;">${appData.stats.gamesPlayed}</div>
                 </div>
               </div>
+
+              ${appData.recentRuns && appData.recentRuns.length ? `<div class="card" style="padding:11px 14px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span class="font-display" style="font-size:12px;color:${GOLD};">🏆 ÚLTIMAS PARTIDAS</span><span style="font-size:11px;color:var(--muted);">Mejor: ${appData.stats.bestRunDistance.toLocaleString()}m</span></div>
+                <div style="display:flex;gap:6px;margin-top:8px;">${appData.recentRuns.slice(0, 3).map((r) => `<div style="flex:1;text-align:center;padding:7px 4px;border-radius:11px;background:rgba(0,0,0,0.38);border:1px solid ${r.isRecord ? GOLD + "66" : "rgba(255,255,255,0.08)"};"><div class="font-display" style="font-size:14px;color:${r.isRecord ? GOLD : "#fff"};">${r.score.toLocaleString()}</div><div style="font-size:10px;color:var(--muted);">pts · 🪙${r.coins}</div></div>`).join("")}</div>
+              </div>` : ""}
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
                 <button id="btn-open-settings" class="btn-outline">
@@ -2354,7 +2277,7 @@
                     <div class="font-display" style="font-size:13.5px;color:#fff;">${sk.name}</div>
                     <div style="font-size:11px;color:var(--muted);margin-top:2px;">${sk.subtitle}</div>
                     <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">
-                      ${sk.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueada" : `${sk.price} monedas`)}
+                      ${sk.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueada" : `${ICONS.coin} ${sk.price}`)}
                     </div>
                   </div>
                 </div>
@@ -2384,7 +2307,7 @@
                     <div class="font-display" style="font-size:13.5px;color:#fff;">${th.name}</div>
                     <div style="font-size:11px;color:var(--muted);margin-top:2px;">${th.subtitle}</div>
                     <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">
-                      ${th.price === 0 ? "Gratis · Tema inicial" : (unlocked ? "Desbloqueado" : `${th.price} monedas`)}
+                      ${th.price === 0 ? "Gratis · Tema inicial" : (unlocked ? "Desbloqueado" : `${ICONS.coin} ${th.price}`)}
                     </div>
                   </div>
                 </div>
@@ -2411,7 +2334,7 @@
             return `<div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:${equipped ? theme.accent : "var(--line)"};">
               <div style="display:flex;align-items:center;gap:10px;min-width:0;"><div style="width:56px;height:44px;border-radius:13px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.12);display:grid;place-items:center;font-size:20px;flex-shrink:0;">🎵</div>
               <div style="min-width:0;"><div class="font-display" style="font-size:13.5px;">${tr.name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">${tr.subtitle}</div>
-              <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">${tr.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueado" : tr.price + " monedas")}</div></div></div>
+              <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">${tr.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueado" : ICONS.coin + " " + tr.price)}</div></div></div>
               <button data-music-id="${tr.id}" ${equipped || (!unlocked && !canBuy) ? "disabled" : ""} style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;flex-shrink:0;background:${equipped ? "rgba(255,255,255,0.16)" : (unlocked ? theme.accent : (canBuy ? GOLD : "rgba(255,255,255,0.08)"))};color:${equipped ? "#fff" : "#070c14"};">${btnText}</button></div>`;
           }).join("");
 
@@ -2424,7 +2347,7 @@
             return `<div class="card" style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:${equipped ? (tr.color || theme.accent) : "var(--line)"};">
               <div style="display:flex;align-items:center;gap:10px;min-width:0;"><div style="width:56px;height:44px;border-radius:13px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.12);display:grid;place-items:center;flex-shrink:0;">${dot}</div>
               <div style="min-width:0;"><div class="font-display" style="font-size:13.5px;">${tr.name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">${tr.subtitle}</div>
-              <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">${tr.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueado" : tr.price + " monedas")}</div></div></div>
+              <div style="font-size:11px;font-weight:700;color:${unlocked ? "#6ee7b7" : GOLD};margin-top:3px;">${tr.price === 0 ? "Gratis · Inicial" : (unlocked ? "Desbloqueado" : ICONS.coin + " " + tr.price)}</div></div></div>
               <button data-trail-id="${tr.id}" ${equipped || (!unlocked && !canBuy) ? "disabled" : ""} style="padding:9px 12px;border-radius:12px;font-size:12px;font-weight:800;flex-shrink:0;background:${equipped ? "rgba(255,255,255,0.16)" : (unlocked ? theme.accent : (canBuy ? GOLD : "rgba(255,255,255,0.08)"))};color:${equipped ? "#fff" : "#070c14"};">${btnText}</button></div>`;
           }).join("");
 
@@ -2471,80 +2394,48 @@
         }
 
         // -----------------------------------------------------------------------
-        // PANTALLA 3: TORNEO $1000 MXN
+        // PANTALLA 3: TU RÉCORD · ÚLTIMAS 10 PARTIDAS (SIN USUARIOS)
         // -----------------------------------------------------------------------
-        else if (uiState.screen === "tournament") {
-          const ranking = getSortedLeaderboard().slice(0, 10);
-          const rowsHtml = ranking.map((pl, idx) => {
-            const isMe = pl.id === "local_player";
+        else if (uiState.screen === "record") {
+          const runs = appData.recentRuns || [];
+          const best = appData.stats.bestRunDistance || 0;
+          const avg = runs.length ? Math.round(runs.reduce((s, r) => s + r.score, 0) / runs.length) : 0;
+          const rowsHtml = runs.length ? runs.map((r, idx) => {
+            const d = new Date(r.date || Date.now());
+            const when = d.toLocaleDateString("es-MX", { day: "numeric", month: "short" }) + " · " + d.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" });
             const medal = idx === 0 ? "🥇" : (idx === 1 ? "🥈" : (idx === 2 ? "🥉" : `#${idx + 1}`));
+            const w = best > 0 ? Math.max(6, Math.round((r.score / best) * 100)) : 0;
             return `
-              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:13px;background:${isMe ? "rgba(0,240,255,0.14)" : "rgba(255,255,255,0.04)"};border:1px solid ${isMe ? theme.accent : "rgba(255,255,255,0.08)"};">
-                <div style="display:flex;align-items:center;gap:9px;min-width:0;">
+              <div style="padding:9px 11px;border-radius:13px;background:${r.isRecord ? "rgba(255,225,77,0.10)" : "rgba(255,255,255,0.04)"};border:1px solid ${r.isRecord ? GOLD + "66" : "rgba(255,255,255,0.08)"};">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
                   <span class="font-display" style="font-size:13px;width:28px;color:${idx < 3 ? GOLD : "#fff"};">${medal}</span>
-                  <div style="min-width:0;">
-                    <div style="font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${pl.name} ${isMe ? "(Tú)" : ""}</div>
-                    <div style="font-size:10.5px;color:var(--muted);">Mejor marca: ${pl.bestRun}m · ${pl.games} partidas</div>
-                  </div>
+                  <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:#fff;">${r.score.toLocaleString()} pts ${r.isRecord ? '<span style="color:' + GOLD + ';font-size:10px;">★ RÉCORD</span>' : ""}</div><div style="font-size:10.5px;color:var(--muted);">${when} · 🪙 +${r.coins}</div></div>
+                  <span style="font-size:11px;color:var(--muted);">${r.score.toLocaleString()}m</span>
                 </div>
-                <div class="font-display" style="font-size:14px;color:${theme.accent};font-weight:800;">${pl.totalScore.toLocaleString()} pts</div>
-              </div>
-            `;
-          }).join("");
-
+                <div style="height:5px;border-radius:99px;background:rgba(255,255,255,0.08);margin-top:7px;overflow:hidden;"><div style="height:100%;width:${w}%;border-radius:99px;background:linear-gradient(90deg, ${theme.accent}, ${theme.secondary});"></div></div>
+              </div>`;
+          }).join("") : `<div style="padding:16px;text-align:center;color:var(--muted);font-size:12.5px;">Aún no hay partidas.<br>Juega una y tu primer puntaje aparecerá aquí.</div>`;
           mainHtml = `
             <div style="display:flex;flex-direction:column;gap:11px;padding-bottom:12px;">
               <div style="display:flex;align-items:center;justify-content:space-between;">
-                <button id="btn-back-menu" class="pill-btn">
-                  ${ICONS.back}
-                  <span>REGRESAR</span>
-                </button>
-                <span style="font-size:11px;font-weight:700;color:${GOLD};">TEMPORADA OFICIAL</span>
+                <button id="btn-back-menu" class="pill-btn">${ICONS.back}<span>REGRESAR</span></button>
+                <span style="font-size:11px;font-weight:700;color:${GOLD};">SOLO TÚ · SIN USUARIOS</span>
               </div>
-
-              <div class="card" style="padding:14px;background:${theme.heroGrad};border-color:${GOLD}55;">
-                <div class="font-display" style="font-size:18px;color:${GOLD};">TORNEO OFICIAL $1,400 MXN</div>
-                <p style="font-size:12px;color:rgba(255,255,255,0.82);margin:4px 0 10px;">
-                  Acumula metros jugando en Modo Infinito. Cada metro recorrido equivale exactamente a 1 punto oficial.
-                </p>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;text-align:center;">
-                  <div style="padding:9px 6px;border-radius:14px;background:rgba(0,0,0,0.42);border:1px solid ${GOLD}66;">
-                    <div style="font-size:11px;color:${GOLD};font-weight:700;">1° LUGAR</div>
-                    <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">$1,000</div>
-                    <div style="font-size:10px;color:var(--muted);">MXN</div>
-                  </div>
-                  <div style="padding:9px 6px;border-radius:14px;background:rgba(0,0,0,0.42);border:1px solid rgba(255,255,255,0.2);">
-                    <div style="font-size:11px;color:#e2e8f0;font-weight:700;">2° LUGAR</div>
-                    <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">$300</div>
-                    <div style="font-size:10px;color:var(--muted);">MXN</div>
-                  </div>
-                  <div style="padding:9px 6px;border-radius:14px;background:rgba(0,0,0,0.42);border:1px solid rgba(251,146,60,0.35);">
-                    <div style="font-size:11px;color:#fdba74;font-weight:700;">3° LUGAR</div>
-                    <div class="font-display" style="font-size:15px;color:#fff;margin-top:2px;">$100</div>
-                    <div style="font-size:10px;color:var(--muted);">MXN</div>
-                  </div>
+              <div class="card" style="padding:14px;background:${theme.heroGrad};border-color:${GOLD}55;text-align:center;">
+                <div class="font-display" style="font-size:12px;color:${GOLD};letter-spacing:0.12em;">🏆 TU RÉCORD PERSONAL</div>
+                <div class="font-display" style="font-size:36px;color:#fff;margin:4px 0;">${best.toLocaleString()} <span style="font-size:14px;color:${theme.accent};">pts</span></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;text-align:center;margin-top:8px;">
+                  <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.42);"><div style="font-size:10.5px;color:var(--muted);">Partidas</div><div class="font-display" style="font-size:15px;margin-top:2px;">${appData.stats.gamesPlayed}</div></div>
+                  <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.42);"><div style="font-size:10.5px;color:var(--muted);">Promedio (10)</div><div class="font-display" style="font-size:15px;margin-top:2px;">${avg.toLocaleString()}</div></div>
+                  <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.42);"><div style="font-size:10.5px;color:var(--muted);">Total</div><div class="font-display" style="font-size:15px;margin-top:2px;">${appData.stats.totalScore.toLocaleString()}</div></div>
                 </div>
               </div>
-
-              <div class="card" style="padding:12px 14px;">
-                <div class="font-display" style="font-size:13px;color:${theme.accent};margin-bottom:6px;">REGLAS Y JUEGO LIMPIO</div>
-                <ul style="margin:0;padding-left:18px;font-size:12px;color:rgba(255,255,255,0.8);line-height:1.5;">
-                  <li><strong>1 metro = 1 punto</strong> sin bonificadores externos.</li>
-                  <li>Todas tus partidas suman a tu Score Total acumulado.</li>
-                  <li>Las monedas, naves y temas son estrictamente cosméticos.</li>
-                  <li>Cualquier alteración de velocidad o memoria descalifica el registro.</li>
-                </ul>
-              </div>
-
               <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:7px;">
-                <div class="font-display" style="font-size:13px;color:${GOLD};margin-bottom:2px;">TOP 10 CLASIFICACIÓN LOCAL</div>
+                <div class="font-display" style="font-size:13px;color:${GOLD};">ÚLTIMAS 10 PARTIDAS · MÁS RECIENTE ARRIBA</div>
                 ${rowsHtml}
               </div>
 
-              <button id="btn-back-menu-bottom" class="btn-outline">
-                ${ICONS.back}
-                <span>REGRESAR AL MENÚ</span>
-              </button>
+              <button id="btn-back-menu-bottom" class="btn-outline">${ICONS.back}<span>REGRESAR AL MENÚ</span></button>
             </div>
           `;
         }
@@ -2567,7 +2458,7 @@
                 <div style="display:flex;align-items:center;justify-content:space-between;">
                   <div>
                     <div style="font-size:13.5px;font-weight:700;">Música Synthwave</div>
-                    <div style="font-size:11px;color:var(--muted);">Bajo electrónico procedural en partida</div>
+                    <div style="font-size:11px;color:var(--muted);">Bajo + kick + pad + lead procedural · 6 temas en Tienda</div>
                   </div>
                   <button id="toggle-music" class="switch-btn ${appData.settings.music ? "on" : ""}" aria-label="Música">
                     <span class="switch-knob"></span>
@@ -2677,7 +2568,7 @@
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px;text-align:center;">
                     <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.38);">
                       <div style="font-size:10.5px;color:var(--muted);">Monedas Ganadas</div>
-                      <div class="font-display" style="font-size:15px;color:${GOLD};margin-top:2px;">🪙 +${sum.coins}</div>
+                      <div class="font-display" style="font-size:15px;color:${GOLD};margin-top:2px;display:flex;align-items:center;justify-content:center;gap:5px;">${ICONS.coin}<span>+${sum.coins}</span></div>
                     </div>
                     <div style="padding:8px;border-radius:12px;background:rgba(0,0,0,0.38);">
                       <div style="font-size:10.5px;color:var(--muted);">Score Acumulado</div>
@@ -2689,9 +2580,10 @@
                       ${ICONS.restart}
                       <span>VOLVER A JUGAR</span>
                     </button>
+                    <button id="btn-go-record-over" class="btn-outline" style="border-color:${GOLD}55;color:${GOLD};">${ICONS.trophy}<span>VER MI RÉCORD</span></button>
                     <button id="btn-go-shop-over" class="btn-outline" style="border-color:${GOLD}55;color:${GOLD};">
                       ${ICONS.shop}
-                      <span>IR A TIENDA (${appData.coinsBalance} 🪙)</span>
+                      <span>IR A TIENDA</span>
                     </button>
                     <button id="btn-quit-menu" class="btn-outline">
                       ${ICONS.back}
@@ -2705,7 +2597,15 @@
 
           mainHtml = `
             <div style="display:flex;flex-direction:column;height:100%;gap:7px;">
-              <div class="card" style="padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0;">
+              <div class="canvas-wrap" style="border-color:${game.liveRecordBeat ? GOLD + "77" : "var(--line)"};">
+                <canvas id="gameCanvas" width="360" height="480"></canvas>
+                <button id="btn-pause-game" aria-label="Pausar" style="position:absolute;top:10px;right:10px;z-index:10;width:38px;height:38px;border-radius:50%;background:${theme.accent};color:#070c14;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.45);">${ICONS.pause}</button>
+                <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;pointer-events:none;font-size:10px;font-weight:700;letter-spacing:0.06em;color:rgba(255,255,255,0.5);">
+                  TOCA PANTALLA: SALTAR · DOBLE TOQUE: BAJAR
+                </div>
+                ${overlayHtml}
+              </div>
+              <div class="card" style="padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0;margin-top:2px;">
                 <div style="min-width:0;">
                   <div id="hud-dist-label" style="font-size:10px;font-weight:700;letter-spacing:0.06em;color:${game.liveRecordBeat ? GOLD : "rgba(255,255,255,0.6)"};">
                     ${game.liveRecordBeat ? "★ RÉCORD EN VIVO · 1m = 1pt" : "DISTANCIA / SCORE (1m = 1pt)"}
@@ -2717,28 +2617,16 @@
                     🔥 ${game.streak} · x${mult} · ${kmh} km/h${game.streak >= 15 ? " · 🧲" : ""}
                   </div>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                  <div style="text-align:right;">
-                    <div id="hud-hearts-row" style="display:flex;gap:2px;justify-content:flex-end;">${heartsHtml}</div>
-                    <div id="hud-coins-val" style="font-size:11px;font-weight:800;color:${GOLD};margin-top:2px;">🪙 +${game.coinCount}</div>
-                    ${appData.settings.showFps ? `<div id="hud-fps-val" style="font-size:10px;font-weight:700;color:${theme.accent};margin-top:1px;">${currentFps} FPS</div>` : ""}
-                  </div>
-                  <button id="btn-pause-game" aria-label="Pausar" style="width:38px;height:38px;border-radius:50%;background:${theme.accent};color:#070c14;display:grid;place-items:center;">
-                    ${ICONS.pause}
-                  </button>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div id="hud-hearts-row" style="display:flex;gap:2px;justify-content:flex-end;">${heartsHtml}</div>
+                  <div id="hud-coins-val" style="font-size:11px;font-weight:800;color:${GOLD};margin-top:2px;display:inline-flex;align-items:center;gap:4px;">${ICONS.coin}<span>+${game.coinCount}</span></div>
+                  ${appData.settings.showFps ? `<div id="hud-fps-val" style="font-size:10px;font-weight:700;color:${theme.accent};margin-top:1px;">${currentFps} FPS</div>` : ""}
                 </div>
               </div>
-
-              <div id="hud-missions-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex-shrink:0;">
-                ${renderMissionsHtml()}
-              </div>
-
-              <div class="canvas-wrap" style="border-color:${game.liveRecordBeat ? GOLD + "77" : "var(--line)"};">
-                <canvas id="gameCanvas" width="360" height="480"></canvas>
-                <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;pointer-events:none;font-size:10px;font-weight:700;letter-spacing:0.06em;color:rgba(255,255,255,0.5);">
-                  TOCA PANTALLA: SALTAR · DOBLE TOQUE: BAJAR
-                </div>
-                ${overlayHtml}
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;padding:2px 2px 0;">
+                <span id="hud-bottom-val" style="font-size:11px;font-weight:800;color:${theme.accent};white-space:nowrap;">${game.meters.toLocaleString()}m</span>
+                <div style="flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,0.08);overflow:hidden;"><div id="hud-bottom-fill" style="height:100%;width:${Math.min(100, appData.stats.bestRunDistance > 0 ? Math.round((game.meters / appData.stats.bestRunDistance) * 100) : 0)}%;background:linear-gradient(90deg, ${theme.accent}, ${GOLD});border-radius:99px;"></div></div>
+                <span style="font-size:10px;color:var(--muted);white-space:nowrap;">RÉCORD ${appData.stats.bestRunDistance.toLocaleString()}m</span>
               </div>
             </div>
           `;
@@ -2748,27 +2636,11 @@
         // MODALES GLOBALES (ALIAS DE JUGADOR Y SALIDA REAL ANDROID)
         // -----------------------------------------------------------------------
         let globalModalHtml = "";
-        if (uiState.aliasModalOpen) {
-          globalModalHtml = `
-            <div class="modal-global">
-              <div class="card" style="width:100%;max-width:360px;padding:18px;">
-                <div class="font-display" style="font-size:17px;color:${theme.accent};">ALIAS DE COMPETIDOR</div>
-                <p style="font-size:12px;color:var(--muted);margin:6px 0 12px;line-height:1.4;">
-                  Tu alias aparecerá en la tabla del Torneo $1000 y guardará tu puntuación acumulada offline.
-                </p>
-                <input id="input-player-alias" type="text" maxlength="18" placeholder="Ej. NeonRider_MX" value="${(appData.settings.playerName || "").replace(/"/g, "&quot;")}">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
-                  <button id="btn-cancel-alias" class="btn-outline">Cancelar</button>
-                  <button id="btn-save-alias" class="btn-primary">Guardar</button>
-                </div>
-              </div>
-            </div>
-          `;
-        } else if (uiState.exitModalOpen) {
+        if (uiState.exitModalOpen) {
           globalModalHtml = `
             <div class="modal-global">
               <div class="card" style="width:100%;max-width:350px;padding:18px;text-align:center;">
-                <div class="font-display" style="font-size:17px;color:#fca5a5;">¿SALIR DE NEON DASH?</div>
+                <div class="font-display" style="font-size:17px;color:#fca5a5;">¿SALIR DE NEON DASH PRO?</div>
                 <p style="font-size:12.5px;color:var(--muted);margin:8px 0 16px;">Tu progreso, monedas y desbloqueos ya están guardados localmente.</p>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                   <button id="btn-cancel-exit" class="btn-outline">Cancelar</button>
@@ -2786,19 +2658,13 @@
             <div style="display:flex;align-items:center;gap:8px;min-width:0;">
               <div class="font-display" style="width:32px;height:32px;border-radius:10px;background:${skin.body};color:#070c14;display:grid;place-items:center;font-size:16px;font-weight:900;flex-shrink:0;">◆</div>
               <div style="min-width:0;">
-                <div class="font-display" style="font-size:13.5px;line-height:1.1;color:#fff;">NEON DASH</div>
+                <div class="font-display" style="font-size:13.5px;line-height:1.1;color:#fff;">NEON DASH PRO <span style="font-size:9px;padding:2px 5px;border-radius:6px;background:#ffe14d;color:#070c14;vertical-align:middle;">PRO</span></div>
                 <div style="font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${theme.name}</div>
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <div style="display:inline-flex;align-items:center;gap:4px;padding:5px 9px;border-radius:999px;background:rgba(255,225,77,0.14);border:1px solid rgba(255,225,77,0.38);color:${GOLD};font-size:11.5px;font-weight:800;">
-                ${ICONS.coin}
-                <span>${appData.coinsBalance.toLocaleString()}</span>
-              </div>
-              <button id="btn-header-alias" class="pill-btn" style="max-width:120px;">
-                ${ICONS.user}
-                <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${aliasText}</span>
-              </button>
+              <div style="display:inline-flex;align-items:center;gap:4px;padding:5px 9px;border-radius:999px;background:rgba(255,225,77,0.14);border:1px solid rgba(255,225,77,0.38);color:${GOLD};font-size:11.5px;font-weight:800;">${ICONS.coin}<span>${appData.coinsBalance.toLocaleString()}</span></div>
+              <button id="btn-header-record" class="pill-btn" style="max-width:130px;border-color:${GOLD}55;color:${GOLD};"><span>🏆</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${appData.stats.bestRunDistance.toLocaleString()}m</span></button>
             </div>
           </header>
 
@@ -2823,32 +2689,12 @@
       function bindEvents() {
         const byId = (id) => document.getElementById(id);
 
-        const btnAlias = byId("btn-header-alias");
-        if (btnAlias) {
-          btnAlias.onclick = () => {
-            uiState.aliasModalOpen = true;
-            uiState.pendingPlayAfterAlias = false;
-            renderApp();
-          };
-        }
-
+        const btnHeaderRecord = byId("btn-header-record");
+        if (btnHeaderRecord) btnHeaderRecord.onclick = () => { uiState.screen = "record"; renderApp(); };
         const btnPlay = byId("btn-play-main");
-        if (btnPlay) {
-          btnPlay.onclick = () => {
-            if (!appData.settings.playerName || !appData.settings.playerName.trim()) {
-              uiState.aliasModalOpen = true;
-              uiState.pendingPlayAfterAlias = true;
-              renderApp();
-              return;
-            }
-            initGameSession();
-          };
-        }
-
-        const btnTourney = byId("btn-open-tournament");
-        if (btnTourney) btnTourney.onclick = () => { uiState.screen = "tournament"; renderApp(); };
-
-        const btnShop = byId("btn-open-shop");
+        if (btnPlay) { btnPlay.onclick = () => { initGameSession(); }; }
+        const btnRecord = byId("btn-open-record");
+        if (btnRecord) btnRecord.onclick = () => { uiState.screen = "record"; renderApp(); };        const btnShop = byId("btn-open-shop");
         if (btnShop) btnShop.onclick = () => { uiState.screen = "shop"; renderApp(); };
 
         const btnSettings = byId("btn-open-settings");
@@ -3015,7 +2861,9 @@
         const btnPlayAgain = byId("btn-play-again");
         if (btnPlayAgain) btnPlayAgain.onclick = () => initGameSession();
 
-        const btnGoShopOver = byId("btn-go-shop-over");
+        const btnGoRecordOver = byId("btn-go-record-over");
+          if (btnGoRecordOver) btnGoRecordOver.onclick = () => { if (rafId) cancelAnimationFrame(rafId); uiState.screen = "record"; renderApp(); };
+          const btnGoShopOver = byId("btn-go-shop-over");
         if (btnGoShopOver) {
           btnGoShopOver.onclick = () => {
             if (rafId) cancelAnimationFrame(rafId);
@@ -3035,37 +2883,6 @@
           };
         }
 
-        const btnCancelAlias = byId("btn-cancel-alias");
-        if (btnCancelAlias) {
-          btnCancelAlias.onclick = () => {
-            uiState.aliasModalOpen = false;
-            uiState.pendingPlayAfterAlias = false;
-            renderApp();
-          };
-        }
-
-        const btnSaveAlias = byId("btn-save-alias");
-        if (btnSaveAlias) {
-          btnSaveAlias.onclick = () => {
-            const inp = byId("input-player-alias");
-            const val = inp ? inp.value.trim() : "";
-            if (!val) {
-              showToast("Escribe un alias válido para continuar.");
-              return;
-            }
-            appData.settings.playerName = val;
-            persistData();
-            uiState.aliasModalOpen = false;
-            const shouldPlay = uiState.pendingPlayAfterAlias;
-            uiState.pendingPlayAfterAlias = false;
-            if (shouldPlay) {
-              initGameSession();
-            } else {
-              showToast(`Alias "${val}" guardado.`);
-            }
-          };
-        }
-
         const btnCancelExit = byId("btn-cancel-exit");
         if (btnCancelExit) {
           btnCancelExit.onclick = () => {
@@ -3082,14 +2899,7 @@
 
       window.addEventListener("keydown", (ev) => {
         if (ev.repeat) return;
-        if (uiState.aliasModalOpen) {
-          if (ev.code === "Enter") {
-            const btn = document.getElementById("btn-save-alias");
-            if (btn) btn.click();
-          }
-          return;
-        }
-        if (uiState.screen === "game") {
+                if (uiState.screen === "game") {
           if (ev.code === "Space" || ev.code === "ArrowUp" || ev.code === "KeyW") {
             ev.preventDefault();
             requestJump();
