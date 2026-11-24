@@ -1,0 +1,25 @@
+name: dash_neon_pro
+description: Dash Neon Pro - Juego arcade infinito de neón
+publish_to: 'none'
+version: 2.0.0+2
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  webview_flutter: ^4.10.0
+  webview_flutter_android: ^4.3.0
+  wakelock_plus: ^1.2.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/game/
+    - assets/icons/
